@@ -15,40 +15,55 @@
     }
   </style>
 </head>
-<body class="d-flex justify-content-center align-items-center">
-    <div class="h-75 w-25 card" style="border: solid 1px; display: block;">
-        <div class="card-body d-flex justify-content-center align-items-center">
-            <form action="submit.php" method="POST">
+<body class="d-flex justify-content-center align-items-center row">
+    <div class="h-75 card col-4" style="border: solid 1px; display: block;">
+        <div class="card-body d-flex justify-content-center align-items-center row">
+            <form>
                 <h3 class="text-center">Registrazione</h3>
-                <div class="d-flex flex-column" style="margin-top: 20%;">
-                    <div class="form-group">
-                        <label for="nome" class="form-label">Nome</label>
-                        <input type="text" id="nome" name="nome" class="form-control" required>
+                <div class="d-flex flex-column col-12" style="margin-top: 20%;">
+                    <div class="form-group row justify-content-center">
+                        <label for="name" class="form-label col-12">
+                            Nome
+                            <input type="text" id="name" name="nome" class="form-control" maxlength="30" required>
+                        </label>
                     </div>
         
-                    <div class="form-group">
-                        <label for="cognome" class="col-form-label" style="width: 100px;">Cognome</label>
-                        <input type="text" id="cognome" name="cognome" class="form-control" style="width: 300px;" required>
+                    <div class="form-group row justify-content-center">
+                        <label for="surname" class="col-form-label col-12">
+                            Cognome
+                            <input type="text" id="surname" name="cognome" class="form-control" style="width: 300px;" maxlength="15" required>
+                        </label>
                     </div>
         
-                    <div class="form-group">
-                        <label for="username" class="col-form-label" style="width: 100px;">Username</label>
-                        <input type="text" id="username" name="username" class="form-control " style="width: 300px;" required>
+                    <div class="form-group row justify-content-center">
+                        <label for="username" class="col-form-label col-12">
+                            Username
+                            <input type="text" id="username" name="username" class="form-control " style="width: 300px;" maxlength="15" required>
+                        </label>
                     </div>
         
-                    <div class="form-group">
-                        <label for="email" class="col-form-label" style="width: 100px;">Email</label>
-                        <input type="email" id="email" name="email" class="form-control" style="width: 300px;" required>
+                    <div class="form-group row justify-content-center">
+                        <label for="email" class="col-form-label col-12">
+                            Email
+                            <input type="email" id="email" name="email" class="form-control" style="width: 300px;" maxlength="255" required>
+                        </label>
                     </div>
 
-                    <div class="form-group">
-                        <label for="password" class="col-form-label" style="width: 100px;">Password</label>
-                        <input type="password" id="password" name="password" class="form-control" style="width: 300px;" required>
+                    <div class="form-group row justify-content-center">
+                        <label for="password" class="col-form-label col-12">Password
+                            <input type="password" id="password" name="password" class="form-control" style="width: 300px;" maxlength="15" required>
+                        </label>
                     </div>
 
-                    <button type="submit"  id="submit" style="margin-top: 20%;">
+                    <button type="submit" id="submit" style="margin-top: 20%;">
                         Conferma
                     </button>
+                    
+                    <div class="d-flex justify-content-center align-items-center">
+                        <a href = "login.html" style="margin-top: 10px;">
+                            Torna a login
+                        </a>
+                    </div>
                 </div>
             </form>
         </div>
