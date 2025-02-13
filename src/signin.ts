@@ -7,11 +7,13 @@ const username_input = document.getElementById("username") as HTMLInputElement
 const email_input = document.getElementById("email") as HTMLInputElement
 const password_input = document.getElementById("password") as HTMLInputElement
 
+const trismaster = 'http://trismaster.ddns.net:8080/'
+
 if(button) {
     button.addEventListener("click", async () => {
         if(name_input.value != null && surname_input.value != null && username_input.value != null && email_input.value != null && password_input.value != null) {
             try {
-                const response = await axios.post('http://urlserver/signin', {
+                const response = await axios.post(trismaster + 'signign', {
                     nome: name_input.value,
                     surname: surname_input.value,
                     username: username_input.value,
