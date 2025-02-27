@@ -1,17 +1,145 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="it">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TypeScript Frontend</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Gioca a Tris - Home</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .cell {
+      width: 100%;
+      padding: 1rem;
+      font-size: 2rem;
+      text-align: center;
+      min-height: 80px;
+    }
+    .board-row {
+      margin-bottom: 0.5rem;
+    }
+    .active {
+      background-color: #d1e7dd !important;
+    }
+  </style>
 </head>
 <body>
-    <div>
-        <card>
-            <card-body>
-                <card-title> <h5> HOME </h5> </card-title>
-            </card-body>
-        </card>
+  <div class="container my-5">
+    <!-- Header / Card Home -->
+    <div class="card">
+      <div class="card-header">
+        <h5 class="card-title mb-0">HOME</h5>
+      </div>
+      <div class="card-body">
+        <p class="card-text">
+          Benvenuto nel sito per giocare a Tris! Seleziona una partita dalla lista qui sotto oppure creane una nuova.
+        </p>
+      </div>
     </div>
+
+    <!-- Lista delle partite -->
+    <div class="mt-4">
+      <h6 class="mb-3">Le tue partite:</h6>
+      <ul class="list-group" id="gamesList">
+        <li class="list-group-item list-group-item-action" data-game-id="1">
+          Partita #1 <span class="badge bg-primary rounded-pill">Avversario: Mario</span>
+        </li>
+        <li class="list-group-item list-group-item-action" data-game-id="2">
+          Partita #2 <span class="badge bg-primary rounded-pill">Avversario: Luigi</span>
+        </li>
+        <li class="list-group-item list-group-item-action" data-game-id="3">
+          Partita #3 <span class="badge bg-primary rounded-pill">Avversario: Peach</span>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Schermata interattiva per la mossa -->
+    <div class="mt-5" id="moveSection" style="display: none;">
+      <h6>Fai la tua mossa:</h6>
+      <div id="ticTacToeBoard" class="container">
+        <!-- Tabellone 3x3 con Bootstrap grid -->
+        <div class="row board-row">
+          <div class="col-4">
+            <button class="btn btn-outline-primary cell" data-index="0"></button>
+          </div>
+          <div class="col-4">
+            <button class="btn btn-outline-primary cell" data-index="1"></button>
+          </div>
+          <div class="col-4">
+            <button class="btn btn-outline-primary cell" data-index="2"></button>
+          </div>
+        </div>
+        <div class="row board-row">
+          <div class="col-4">
+            <button class="btn btn-outline-primary cell" data-index="3"></button>
+          </div>
+          <div class="col-4">
+            <button class="btn btn-outline-primary cell" data-index="4"></button>
+          </div>
+          <div class="col-4">
+            <button class="btn btn-outline-primary cell" data-index="5"></button>
+          </div>
+        </div>
+        <div class="row board-row">
+          <div class="col-4">
+            <button class="btn btn-outline-primary cell" data-index="6"></button>
+          </div>
+          <div class="col-4">
+            <button class="btn btn-outline-primary cell" data-index="7"></button>
+          </div>
+          <div class="col-4">
+            <button class="btn btn-outline-primary cell" data-index="8"></button>
+          </div>
+        </div>
+      </div>
+      <button id="submitMove" class="btn btn-primary mt-3">Invia mossa</button>
+    </div>
+  </div>
+
+  <!-- Bootstrap Bundle with Popper -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Quando si clicca su una partita, mostra la sezione per fare la mossa
+    document.getElementById('gamesList').addEventListener('click', function(event) {
+      const li = event.target.closest('li');
+      if (li) {
+        const gameId = li.getAttribute('data-game-id');
+        console.log('Partita selezionata: ' + gameId);
+        // Qui potresti caricare la situazione attuale della partita dal backend
+        document.getElementById('moveSection').style.display = 'block';
+      }
+    });
+
+    // Variabile per tenere traccia della cella selezionata
+    let selectedCell = null;
+    const cells = document.querySelectorAll('.cell');
+
+    cells.forEach(cell => {
+      cell.addEventListener('click', function() {
+        // Se esiste già una cella selezionata, la "svuotiamo"
+        if (selectedCell && selectedCell !== cell) {
+          selectedCell.textContent = '';
+          selectedCell.classList.remove('active');
+        }
+        // Aggiorna la cella cliccata: mostra "X" e applica lo stile "active"
+        cell.textContent = 'X';
+        cell.classList.add('active');
+        selectedCell = cell;
+        console.log('Cella selezionata: ' + cell.getAttribute('data-index'));
+      });
+    });
+
+    // Gestione del click sul bottone "Invia mossa"
+    document.getElementById('submitMove').addEventListener('click', function() {
+      if (selectedCell !== null) {
+        // Logica per inviare la mossa al backend
+        alert('Mossa inviata: cella ' + selectedCell.getAttribute('data-index'));
+        // (Opzionale) Resetta la selezione dopo l'invio
+        selectedCell.classList.remove('active');
+        selectedCell = null;
+      } else {
+        alert('Seleziona una cella per fare la mossa!');
+      }
+    });
+  </script>
 </body>
 </html>
