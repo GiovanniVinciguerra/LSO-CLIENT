@@ -40,8 +40,11 @@ if (button) {
 
       if (info) info.innerText = "Login effettuato con successo!";
 
-      localStorage.setItem('sessionId', response.data.token);
-      localStorage.setItem('username', response.data.username);
+      localStorage.setItem('name', response.data.name);
+      localStorage.setItem('surname', response.data.surname);
+      localStorage.setItem('email', response.data.email);
+      localStorage.setItem('sessionId', response.data.session_id)
+
 
       window.location.href = '/home.html';
 
