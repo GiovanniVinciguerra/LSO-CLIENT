@@ -44,6 +44,7 @@ if (button) {
       localStorage.setItem('surname', response.data.surname);
       localStorage.setItem('email', response.data.email);
       localStorage.setItem('sessionId', response.data.session_id)
+      localStorage.setItem('username', username);
 
 
       window.location.href = '/home.html';
