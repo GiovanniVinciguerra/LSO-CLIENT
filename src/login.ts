@@ -22,19 +22,20 @@ if (button) {
     }
 
     try {
+        const json = `{
+            "username":"${username}",
+            "password":"${password}"
+        }`;
+        
         const response = await axios.post(
-            trismaster + 'login',
-            `{
-              "username": "${username}",
-              "password": "${password}"
-            }`,
-            {
-              headers: {
-                'Content-Type': 'application/json'
-              }
+          trismaster + 'login',
+          json,
+          {
+            headers: {
+              'Content-Type': 'application/json'
             }
-          );          
-
+          }
+        );
       console.log("Login riuscito:", response.data);
 
       if (info) info.innerText = "Login effettuato con successo!";
