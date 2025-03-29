@@ -22,10 +22,18 @@ if (button) {
     }
 
     try {
-      const response = await axios.post(trismaster + 'login', {
-        username: username,
-        password: password
-      });
+        const response = await axios.post(
+            trismaster + 'login',
+            `{
+              "username": "${username}",
+              "password": "${password}"
+            }`,
+            {
+              headers: {
+                'Content-Type': 'application/json'
+              }
+            }
+          );          
 
       console.log("Login riuscito:", response.data);
 
