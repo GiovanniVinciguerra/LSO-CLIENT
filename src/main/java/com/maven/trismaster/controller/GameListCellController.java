@@ -9,6 +9,8 @@ import com.maven.trismaster.entity.Match;
 import com.maven.trismaster.entity.Stat;
 import com.maven.trismaster.entity.Step;
 import com.maven.trismaster.entity.User;
+
+import javafx.application.Platform;
 import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -40,14 +42,16 @@ public class GameListCellController extends ListCell<Match> implements Initializ
 		this.setStatusTagAndNotice();
 		
 		super.getItem().getPlayer_1Property().addListener(_ -> {
-			this.setPlayer1();
+			Platform.runLater(() -> this.setPlayer1());
 			this.notice.setVisible(true);
 		});
 		super.getItem().getPlayer_2Property().addListener(_ -> {
-			this.setPlayer2();
+			Platform.runLater(() -> this.setPlayer2());
 			this.notice.setVisible(true);
 		});
-		super.getItem().getStatusProperty().addListener(_ -> this.setStatusTagAndNotice());
+		super.getItem().getStatusProperty().addListener(_ -> {
+			Platform.runLater(() -> this.setStatusTagAndNotice());
+		});
 		super.getItem().getSteps().addListener(new ListChangeListener<>() {
 			@Override
 			public void onChanged(Change<? extends Step> change) {
