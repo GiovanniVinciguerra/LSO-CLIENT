@@ -81,7 +81,7 @@ public class GameListCellController extends ListCell<Match> implements Initializ
 		
 		this.refresh.setOnAction(_ -> {
 			try {
-				super.getListView().getSelectionModel().select(super.getItem());
+				ObjectAccessController.setCurrMatch(super.getItem());
 				int status_code = HttpConnection.update_request(super.getItem());
 				if(status_code == 401)
 					throw new Exception(resources.getString(UNAUTHORIZED_USER_ERROR));
