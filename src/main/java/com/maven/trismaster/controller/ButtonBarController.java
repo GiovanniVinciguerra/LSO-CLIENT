@@ -63,7 +63,7 @@ public class ButtonBarController implements Initializable {
 			}
 		});
 		
-		this.about.setOnAction(_ -> App.crt_dlg("about_dialog", null));
+		this.about.setOnAction(_ -> App.crt_dlg("about_dialog", new GenericDialogController(null)));
 		
 		Platform.runLater(() -> this.new_game.requestFocus());
 	}

@@ -152,6 +152,8 @@ public class HttpConnection {
 		
 		String body = EntityUtils.toString(response.getEntity());
 		
+		ObjectAccessController.getStats().clear();
+		
 		if(status_code == 200) {
 			JsonNode json = mapper.readTree(body);
 			
@@ -188,10 +190,15 @@ public class HttpConnection {
 					Integer.parseInt(json.get("match_id").asText()),
 					json.get("player_1").asText(),
 					json.get("player_2").asText(),
-					json.get("status").asText(),
-					json.get("seed").asText()
+					json.get("status").asText()
 				)
 			);
+			
+			Match match = ObjectAccessController.getMatches().getLast();
+			if(match.getPlayer_1().compareTo(User.get_usr_inst().getUsername()) == 0)
+				match.setSeed(json.get("seed_1").asText());
+			else
+				match.setSeed(json.get("seed_2").asText());
 		}
 		
 		return  status_code;
@@ -386,18 +393,26 @@ public class HttpConnection {
 		
 		String body = EntityUtils.toString(response.getEntity());
 		
+		ObjectAccessController.getMatches().clear();
+		
 		if(status_code == 200) {
 			JsonNode json = mapper.readTree(body);
 			
 			json.forEach(match -> {
-				Match load_match = new Match(match.get("match_id").asInt(), match.get("player_1").asText(), match.get("player_2").asText(), match.get("status").asText(), match.get("seed").asText());
+				Match load_match = new Match(match.get("match_id").asInt(), match.get("player_1").asText(), match.get("player_2").asText(), match.get("status").asText());
+				if(load_match.getPlayer_1().compareTo(User.get_usr_inst().getUsername()) == 0)
+					load_match.setSeed(match.get("seed_1").asText());
+				else
+					load_match.setSeed(match.get("seed_2").asText());
 				load_match.setResult(match.get("result").asText());
 				JsonNode stepsNode = json.get("steps");
-				stepsNode.forEach(node -> {
-					int index = Character.getNumericValue(node.get("step").asText().charAt(0));
-					Step step = new Step(index, node.get("step").asText().charAt(1));
-					load_match.getSteps().add(step);
-				});
+				if(stepsNode != null) {
+					stepsNode.forEach(node -> {
+						int index = Character.getNumericValue(node.get("step").asText().charAt(0));
+						Step step = new Step(index, node.get("step").asText().charAt(1));
+						load_match.getSteps().add(step);
+					});
+				}
 				ObjectAccessController.getMatches().add(load_match);
 			});
 		}

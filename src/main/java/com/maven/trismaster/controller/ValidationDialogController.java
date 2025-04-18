@@ -4,6 +4,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import com.maven.trismaster.App;
 import com.maven.trismaster.connection.HttpConnection;
+import com.maven.trismaster.entity.Match;
 import javafx.application.Platform;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -31,10 +32,11 @@ public class ValidationDialogController extends GenericDialogController implemen
 		this.no = (Button) super.root.lookupButton(no_btn);
 		
 		this.yes.setOnAction(_ -> {
+			Match match = ObjectAccessController.getCurrMatch();
 			try {
-				int status_code = HttpConnection.progress_request(ObjectAccessController.getCurrMatch().getMatch_id());
+				int status_code = HttpConnection.progress_request(match.getMatch_id());
 				if(status_code == 200)
-					ObjectAccessController.getCurrMatch().setStatus("1");
+					match.setStatus("1");
 				else if(status_code == 401)
 					throw new Exception(resources.getString(UNAUTHORIZED_USER_ERROR));
 				App.close_dialog();
@@ -45,10 +47,11 @@ public class ValidationDialogController extends GenericDialogController implemen
 			}
 		});
 		this.no.setOnAction(_ -> {
+			Match match = ObjectAccessController.getCurrMatch();
 			try {
-				int status_code = HttpConnection.waiting_request(ObjectAccessController.getCurrMatch());
+				int status_code = HttpConnection.waiting_request(match);
 				if(status_code == 200)
-					ObjectAccessController.getCurrMatch().setStatus("2");
+					match.setStatus("2");
 				else if(status_code == 401)
 					throw new Exception(resources.getString(UNAUTHORIZED_USER_ERROR));
 				App.close_dialog();

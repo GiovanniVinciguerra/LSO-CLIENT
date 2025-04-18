@@ -33,8 +33,8 @@ public class GamePanelController implements Initializable {
 		
 		this.container.setItems(ObjectAccessController.getMatches());
 		this.container.setCellFactory(_ -> new GameListCellController());
-		this.container.getSelectionModel().selectedItemProperty().addListener((_, _, selected_item) -> {
-			if(selected_item != null && selected_item.getStatus().compareTo("1") == 0)
+		this.container.getSelectionModel().selectedItemProperty().addListener((_, _, selectedItem) -> {
+			if(selectedItem != null && selectedItem.getStatus().compareTo("1") == 0)
 				this.enableGameTable();
 			else
 				this.disableGameTable();
@@ -49,7 +49,8 @@ public class GamePanelController implements Initializable {
 	}
 	
 	private void enableGameTable() {
-		for(Step step : ObjectAccessController.getCurrMatch().getSteps()) {
+		Match match = ObjectAccessController.getCurrMatch();
+		for(Step step : match.getSteps()) {
 			if(step.getIndex() == 1) {
 				if(step.getSeed() == 'O')
 					this.sq1.getChildren().addAll(this.circle);
@@ -98,9 +99,9 @@ public class GamePanelController implements Initializable {
 			}
 		}
 		
-		if(ObjectAccessController.getCurrMatch().getSteps().size() % 2 == 0 && User.get_usr_inst().getUsername().compareTo(ObjectAccessController.getCurrMatch().getPlayer_1()) == 0) {
+		if(match.getSteps().size() % 2 == 0 && User.get_usr_inst().getUsername().compareTo(match.getPlayer_1()) == 0) {
 			this.checkEnable();
-		} else if(ObjectAccessController.getCurrMatch().getSteps().size() % 2 != 0 && User.get_usr_inst().getUsername().compareTo(ObjectAccessController.getCurrMatch().getPlayer_2()) == 0) {
+		} else if(match.getSteps().size() % 2 != 0 && User.get_usr_inst().getUsername().compareTo(match.getPlayer_2()) == 0) {
 			this.checkEnable();
 		}
 	}
@@ -127,27 +128,29 @@ public class GamePanelController implements Initializable {
 	}
 	
 	private void calculate() {
-		GameValueTable game = new GameValueTable(new ArrayList<Step>(ObjectAccessController.getCurrMatch().getSteps()));
+		Match match = ObjectAccessController.getCurrMatch();
+		GameValueTable game = new GameValueTable(new ArrayList<Step>(match.getSteps()));
 		if(game.isWinner()) {
-			if(ObjectAccessController.getCurrMatch().getPlayer_1().compareTo(User.get_usr_inst().getUsername()) == 0)
-				ObjectAccessController.getCurrMatch().setResult("1");
+			if(match.getPlayer_1().compareTo(User.get_usr_inst().getUsername()) == 0)
+				match.setResult("1");
 			else
-				ObjectAccessController.getCurrMatch().setResult("2");
-			ObjectAccessController.getCurrMatch().setStatus("0");
-		} else if(ObjectAccessController.getCurrMatch().getSteps().size() == 9) {
-			ObjectAccessController.getCurrMatch().setResult("0");
-			ObjectAccessController.getCurrMatch().setStatus("0");
+				match.setResult("2");
+			match.setStatus("0");
+		} else if(match.getSteps().size() == 9) {
+			match.setResult("0");
+			match.setStatus("0");
 		}
 	}
 	
 	private void prepareGameTable() {
 		this.sq1.setOnMouseClicked(_ -> {
+			Match match = ObjectAccessController.getCurrMatch();
 			try {
-				if(ObjectAccessController.getCurrMatch().getSeed().compareTo("O") == 0)
+				if(match.getSeed().compareTo("O") == 0)
 					this.sq1.getChildren().addAll(this.circle);
 				else
 					this.sq1.getChildren().addAll(this.line1, this.line2);
-				Step step = new Step(1, ObjectAccessController.getCurrMatch().getSeed().charAt(0));
+				Step step = new Step(1, match.getSeed().charAt(0));
 				this.doStepRequest(step);
 				this.disableGameTable();
 				this.calculate();
@@ -159,12 +162,13 @@ public class GamePanelController implements Initializable {
 		});
 		
 		this.sq2.setOnMouseClicked(_ -> {
+			Match match = ObjectAccessController.getCurrMatch();
 			try {
-				if(ObjectAccessController.getCurrMatch().getSeed().compareTo("O") == 0)
+				if(match.getSeed().compareTo("O") == 0)
 					this.sq2.getChildren().addAll(this.circle);
 				else
 					this.sq2.getChildren().addAll(this.line1, this.line2);
-				Step step = new Step(2, ObjectAccessController.getCurrMatch().getSeed().charAt(0));
+				Step step = new Step(2, match.getSeed().charAt(0));
 				this.doStepRequest(step);
 				this.disableGameTable();
 				this.calculate();
@@ -176,12 +180,13 @@ public class GamePanelController implements Initializable {
 		});
 		
 		this.sq3.setOnMouseClicked(_ -> {
+			Match match = ObjectAccessController.getCurrMatch();
 			try {
-				if(ObjectAccessController.getCurrMatch().getSeed().compareTo("O") == 0)
+				if(match.getSeed().compareTo("O") == 0)
 					this.sq3.getChildren().addAll(this.circle);
 				else
 					this.sq3.getChildren().addAll(this.line1, this.line2);
-				Step step = new Step(3, ObjectAccessController.getCurrMatch().getSeed().charAt(0));
+				Step step = new Step(3, match.getSeed().charAt(0));
 				this.doStepRequest(step);
 				this.disableGameTable();
 				this.calculate();
@@ -193,12 +198,13 @@ public class GamePanelController implements Initializable {
 		});
 		
 		this.sq4.setOnMouseClicked(_ -> {
+			Match match = ObjectAccessController.getCurrMatch();
 			try {
-				if(ObjectAccessController.getCurrMatch().getSeed().compareTo("O") == 0)
+				if(match.getSeed().compareTo("O") == 0)
 					this.sq4.getChildren().addAll(this.circle);
 				else
 					this.sq4.getChildren().addAll(this.line1, this.line2);
-				Step step = new Step(4, ObjectAccessController.getCurrMatch().getSeed().charAt(0));
+				Step step = new Step(4, match.getSeed().charAt(0));
 				this.doStepRequest(step);
 				this.disableGameTable();
 				this.calculate();
@@ -210,12 +216,13 @@ public class GamePanelController implements Initializable {
 		});
 		
 		this.sq5.setOnMouseClicked(_ -> {
+			Match match = ObjectAccessController.getCurrMatch();
 			try {
-				if(ObjectAccessController.getCurrMatch().getSeed().compareTo("O") == 0)
+				if(match.getSeed().compareTo("O") == 0)
 					this.sq5.getChildren().addAll(this.circle);
 				else
 					this.sq5.getChildren().addAll(this.line1, this.line2);
-				Step step = new Step(5, ObjectAccessController.getCurrMatch().getSeed().charAt(0));
+				Step step = new Step(5, match.getSeed().charAt(0));
 				this.doStepRequest(step);
 				this.disableGameTable();
 				this.calculate();
@@ -227,12 +234,13 @@ public class GamePanelController implements Initializable {
 		});
 		
 		this.sq6.setOnMouseClicked(_ -> {
+			Match match = ObjectAccessController.getCurrMatch();
 			try {
-				if(ObjectAccessController.getCurrMatch().getSeed().compareTo("O") == 0)
+				if(match.getSeed().compareTo("O") == 0)
 					this.sq6.getChildren().addAll(this.circle);
 				else
 					this.sq6.getChildren().addAll(this.line1, this.line2);
-				Step step = new Step(6, ObjectAccessController.getCurrMatch().getSeed().charAt(0));
+				Step step = new Step(6, match.getSeed().charAt(0));
 				this.doStepRequest(step);
 				this.disableGameTable();
 				this.calculate();
@@ -244,12 +252,13 @@ public class GamePanelController implements Initializable {
 		});
 		
 		this.sq7.setOnMouseClicked(_ -> {
+			Match match = ObjectAccessController.getCurrMatch();
 			try {
-				if(ObjectAccessController.getCurrMatch().getSeed().compareTo("O") == 0)
+				if(match.getSeed().compareTo("O") == 0)
 					this.sq7.getChildren().addAll(this.circle);
 				else
 					this.sq7.getChildren().addAll(this.line1, this.line2);
-				Step step = new Step(7, ObjectAccessController.getCurrMatch().getSeed().charAt(0));
+				Step step = new Step(7, match.getSeed().charAt(0));
 				this.doStepRequest(step);
 				this.disableGameTable();
 				this.calculate();
@@ -261,12 +270,13 @@ public class GamePanelController implements Initializable {
 		});
 		
 		this.sq8.setOnMouseClicked(_ -> {
+			Match match = ObjectAccessController.getCurrMatch();
 			try {
-				if(ObjectAccessController.getCurrMatch().getSeed().compareTo("O") == 0)
+				if(match.getSeed().compareTo("O") == 0)
 					this.sq8.getChildren().addAll(this.circle);
 				else
 					this.sq8.getChildren().addAll(this.line1, this.line2);
-				Step step = new Step(8, ObjectAccessController.getCurrMatch().getSeed().charAt(0));
+				Step step = new Step(8, match.getSeed().charAt(0));
 				this.doStepRequest(step);
 				this.disableGameTable();
 				this.calculate();
@@ -278,12 +288,13 @@ public class GamePanelController implements Initializable {
 		});
 		
 		this.sq9.setOnMouseClicked(_ -> {
+			Match match = ObjectAccessController.getCurrMatch();
 			try {
-				if(ObjectAccessController.getCurrMatch().getSeed().compareTo("O") == 0)
+				if(match.getSeed().compareTo("O") == 0)
 					this.sq9.getChildren().addAll(this.circle);
 				else
 					this.sq9.getChildren().addAll(this.line1, this.line2);
-				Step step = new Step(9, ObjectAccessController.getCurrMatch().getSeed().charAt(0));
+				Step step = new Step(9, match.getSeed().charAt(0));
 				this.doStepRequest(step);
 				this.disableGameTable();
 				this.calculate();
@@ -296,7 +307,8 @@ public class GamePanelController implements Initializable {
 	}
 	
 	private void doStepRequest(Step step) throws Exception {
-		int status_code = HttpConnection.step_request(ObjectAccessController.getCurrMatch().getMatch_id(), step);
+		Match match = ObjectAccessController.getCurrMatch();
+		int status_code = HttpConnection.step_request(match.getMatch_id(), step);
 		if(status_code == 401)
 			throw new Exception(resources.getString(UNAUTHORIZED_USER_ERROR));
 	}

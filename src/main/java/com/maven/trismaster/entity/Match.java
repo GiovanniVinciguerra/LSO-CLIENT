@@ -44,12 +44,11 @@ public class Match {
 	private ObservableList<Step> steps = FXCollections.observableArrayList();
 	private int match_id;
 	
-	public Match(int match_id, String player_1, String player_2, String status, String seed) {
+	public Match(int match_id, String player_1, String player_2, String status) {
 		this.setMatch_id(match_id);
 		this.setPlayer_1(player_1);
 		this.setPlayer_2(player_2);
 		this.setStatus(status);
-		this.setSeed(seed);
 	}
 	
 	public boolean player_1_isUndefined() {
