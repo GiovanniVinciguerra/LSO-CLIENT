@@ -42,14 +42,17 @@ public class GameListCellController extends ListCell<Match> implements Initializ
 		this.setStatusTagAndNotice();
 		
 		super.getItem().getPlayer_1Property().addListener(_ -> {
+			System.out.println("Player_1 Property: " + super.getItem() + "\n");
 			Platform.runLater(() -> this.setPlayer1());
 			this.notice.setVisible(true);
 		});
 		super.getItem().getPlayer_2Property().addListener(_ -> {
+			System.out.println("Player_2 Property: " + super.getItem() + "\n");
 			Platform.runLater(() -> this.setPlayer2());
 			this.notice.setVisible(true);
 		});
 		super.getItem().getStatusProperty().addListener(_ -> {
+			System.out.println("Status Property: " + super.getItem() + "\n");
 			Platform.runLater(() -> this.setStatusTagAndNotice());
 		});
 		super.getItem().getSteps().addListener(new ListChangeListener<>() {
