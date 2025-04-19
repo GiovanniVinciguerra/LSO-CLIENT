@@ -299,8 +299,11 @@ public class HttpConnection {
 		CloseableHttpResponse response = client.execute(post);
 		int status_code = response.getCode();
 		
-		if(status_code == 200)
-			ObjectAccessController.getCurrMatch().getSteps().add(step);
+		if(status_code == 200) {
+			Match match = ObjectAccessController.getCurrentMatch();
+			if(match != null)
+				match.getSteps().add(step);
+		}
 		
 		return status_code;
 	}

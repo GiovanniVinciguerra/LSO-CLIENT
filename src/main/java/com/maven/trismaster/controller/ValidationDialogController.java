@@ -34,33 +34,37 @@ public class ValidationDialogController extends GenericDialogController implemen
 		this.no = (Button) super.root.lookupButton(no_btn);
 		
 		this.yes.setOnAction(_ -> {
-			Match match = ObjectAccessController.getCurrMatch();
-			try {
-				int status_code = HttpConnection.progress_request(match.getMatch_id());
-				if(status_code == 200)
-					match.setStatus("1");
-				else if(status_code == 401)
-					throw new Exception(resources.getString(UNAUTHORIZED_USER_ERROR));
-				App.close_dialog();
-			} catch (Exception error) {
-				error.printStackTrace();
-				App.close_dialog();
-				App.crt_dlg("error_dialog", new GenericDialogController(error.getMessage()));
+			Match match = ObjectAccessController.getValidationMatch();
+			if(match != null) {
+				try {
+					int status_code = HttpConnection.progress_request(match.getMatch_id());
+					if(status_code == 200)
+						match.setStatus("1");
+					else if(status_code == 401)
+						throw new Exception(resources.getString(UNAUTHORIZED_USER_ERROR));
+					App.close_dialog();
+				} catch (Exception error) {
+					error.printStackTrace();
+					App.close_dialog();
+					App.crt_dlg("error_dialog", new GenericDialogController(error.getMessage()));
+				}
 			}
 		});
 		this.no.setOnAction(_ -> {
-			Match match = ObjectAccessController.getCurrMatch();
-			try {
-				int status_code = HttpConnection.waiting_request(match);
-				if(status_code == 200)
-					match.setStatus("2");
-				else if(status_code == 401)
-					throw new Exception(resources.getString(UNAUTHORIZED_USER_ERROR));
-				App.close_dialog();
-			} catch (Exception error) {
-				error.printStackTrace();
-				App.close_dialog();
-				App.crt_dlg("error_dialog", new GenericDialogController(error.getMessage()));
+			Match match = ObjectAccessController.getValidationMatch();
+			if(match != null) {
+				try {
+					int status_code = HttpConnection.waiting_request(match);
+					if(status_code == 200)
+						match.setStatus("2");
+					else if(status_code == 401)
+						throw new Exception(resources.getString(UNAUTHORIZED_USER_ERROR));
+					App.close_dialog();
+				} catch (Exception error) {
+					error.printStackTrace();
+					App.close_dialog();
+					App.crt_dlg("error_dialog", new GenericDialogController(error.getMessage()));
+				}
 			}
 		});
 		

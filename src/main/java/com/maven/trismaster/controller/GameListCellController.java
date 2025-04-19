@@ -45,7 +45,6 @@ public class GameListCellController extends ListCell<Match> implements Initializ
 		
 		this.refresh.setOnAction(_ -> {
 			try {
-				ObjectAccessController.setCurrMatch(super.getItem());
 				int status_code = HttpConnection.update_request(super.getItem());
 				if(status_code == 401)
 					throw new Exception(resources.getString(UNAUTHORIZED_USER_ERROR));
@@ -71,34 +70,33 @@ public class GameListCellController extends ListCell<Match> implements Initializ
 				super.getItem().getSteps().addListener(new ListChangeListener<>() {
 					@Override
 					public void onChanged(Change<? extends Step> change) {
+						change.next();
 						if(change.wasAdded())
 							notice.setVisible(true);
 					}
 				});
-				
-				super.selectedProperty().addListener((_, _, isSelected) -> {
-					if(isSelected)  {
-						ObjectAccessController.setCurrMatch(super.getItem());
-						
-						boolean wasInvisible = this.notice.isVisible();
-						
-						if(super.getItem().getStatus().compareTo("4") == 0) {
-							this.notice.setVisible(false);
-							if(wasInvisible)
-								App.crt_dlg("info_dialog", new GenericDialogController(resources.getString(INFO_NEW_CREATION)));
-						} else if(super.getItem().getStatus().compareTo("3") == 0) {
-							this.notice.setVisible(false);
-							if(wasInvisible)
-								App.crt_dlg("info_dialog", new GenericDialogController(resources.getString(INFO_VALIDATION)));
-						} else if(super.getItem().getStatus().compareTo("2") == 0) {
-							this.notice.setVisible(false);
-							if(wasInvisible)
-								App.crt_dlg("info_dialog", new GenericDialogController(resources.getString(INFO_WAITING)));
-						} else if(super.getItem().getStatus().compareTo("1") == 0)
-							this.notice.setVisible(false);
-					}
-				});
 			}
+			
+			super.selectedProperty().addListener((_, _, isSelected) -> {
+				if(isSelected) {					
+					boolean wasInvisible = this.notice.isVisible();
+					
+					if(super.getItem().getStatus().compareTo("4") == 0) {
+						this.notice.setVisible(false);
+						if(wasInvisible)
+							App.crt_dlg("info_dialog", new GenericDialogController(resources.getString(INFO_NEW_CREATION)));
+					} else if(super.getItem().getStatus().compareTo("3") == 0) {
+						this.notice.setVisible(false);
+						if(wasInvisible)
+							App.crt_dlg("info_dialog", new GenericDialogController(resources.getString(INFO_VALIDATION)));
+					} else if(super.getItem().getStatus().compareTo("2") == 0) {
+						this.notice.setVisible(false);
+						if(wasInvisible)
+							App.crt_dlg("info_dialog", new GenericDialogController(resources.getString(INFO_WAITING)));
+					} else if(super.getItem().getStatus().compareTo("1") == 0)
+						this.notice.setVisible(false);
+				}
+			});
 		});
 	}
 	

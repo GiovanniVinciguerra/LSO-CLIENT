@@ -10,7 +10,6 @@ public class ObjectAccessController {
 	private static ObservableList<Message> messages = FXCollections.observableArrayList();
 	private static ObservableList<Stat> stats = FXCollections.observableArrayList();
 	private static ObservableList<Match> matches = FXCollections.observableArrayList();
-	private static Match currMatch = null;
 	
 	public static ObservableList<Message> getMessages() {
 		return messages;
@@ -24,11 +23,29 @@ public class ObjectAccessController {
 		return matches;
 	}
 	
-	public static Match getCurrMatch() {
-		return currMatch;
+	public static Match getCurrentMatch() {
+		Match match = null;
+		
+		for(Match item : matches) {
+			if(item.getStatus().compareTo("1") == 0) {
+				match = item;
+				break;
+			}
+		}
+			
+		return match;
 	}
 	
-	public static void setCurrMatch(Match match) {
-		currMatch = match;
+	public static Match getValidationMatch() {
+		Match match = null;
+		
+		for(Match item : matches) {
+			if(item.getStatus().compareTo("3") == 0) {
+				match = item;
+				break;
+			}
+		}
+			
+		return match;
 	}
 }

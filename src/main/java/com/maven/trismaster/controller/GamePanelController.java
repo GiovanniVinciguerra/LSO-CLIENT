@@ -45,15 +45,14 @@ public class GamePanelController implements Initializable {
 		Platform.runLater(() -> {
 			this.container.getSelectionModel().selectedItemProperty().addListener((_, _, selectedItem) -> {
 				if(selectedItem != null && selectedItem.getStatus().compareTo("1") == 0)
-					this.enableGameTable();
+					this.enableGameTable(selectedItem);
 				else
 					this.disableGameTable();
 			});
 		});
 	}
 	
-	private void enableGameTable() {
-		Match match = ObjectAccessController.getCurrMatch();
+	private void enableGameTable(Match match) {
 		for(Step step : match.getSteps()) {
 			if(step.getIndex() == 1) {
 				if(step.getSeed() == 'O')
@@ -132,189 +131,211 @@ public class GamePanelController implements Initializable {
 	}
 	
 	private void calculate() {
-		Match match = ObjectAccessController.getCurrMatch();
-		GameValueTable game = new GameValueTable(new ArrayList<Step>(match.getSteps()));
-		if(game.isWinner()) {
-			if(match.getPlayer_1().compareTo(User.get_usr_inst().getUsername()) == 0)
-				match.setResult("1");
-			else
-				match.setResult("2");
-			match.setStatus("0");
-		} else if(match.getSteps().size() == 9) {
-			match.setResult("0");
-			match.setStatus("0");
+		Match match = ObjectAccessController.getCurrentMatch();
+		if(match != null) {
+			GameValueTable game = new GameValueTable(new ArrayList<Step>(match.getSteps()));
+			if(game.isWinner()) {
+				if(match.getPlayer_1().compareTo(User.get_usr_inst().getUsername()) == 0)
+					match.setResult("1");
+				else
+					match.setResult("2");
+				match.setStatus("0");
+			} else if(match.getSteps().size() == 9) {
+				match.setResult("0");
+				match.setStatus("0");
+			}
 		}
 	}
 	
 	private void prepareGameTable() {
 		this.sq1.setOnMouseClicked(_ -> {
-			Match match = ObjectAccessController.getCurrMatch();
-			try {
-				if(match.getSeed().compareTo("O") == 0)
-					this.sq1.getChildren().addAll(this.circle);
-				else
-					this.sq1.getChildren().addAll(this.line1, this.line2);
-				Step step = new Step(1, match.getSeed().charAt(0));
-				this.doStepRequest(step);
-				this.disableGameTable();
-				this.calculate();
-			} catch (Exception error) {
-				error.printStackTrace();
-				this.sq1.getChildren().clear();
-				App.crt_dlg("error_dialog", new GenericDialogController(error.getMessage()));
+			Match match = ObjectAccessController.getCurrentMatch();
+			if(match != null) {
+				try {
+					if(match.getSeed().compareTo("O") == 0)
+						this.sq1.getChildren().addAll(this.circle);
+					else
+						this.sq1.getChildren().addAll(this.line1, this.line2);
+					Step step = new Step(1, match.getSeed().charAt(0));
+					this.doStepRequest(step);
+					this.disableGameTable();
+					this.calculate();
+				} catch (Exception error) {
+					error.printStackTrace();
+					this.sq1.getChildren().clear();
+					App.crt_dlg("error_dialog", new GenericDialogController(error.getMessage()));
+				}
 			}
 		});
 		
 		this.sq2.setOnMouseClicked(_ -> {
-			Match match = ObjectAccessController.getCurrMatch();
-			try {
-				if(match.getSeed().compareTo("O") == 0)
-					this.sq2.getChildren().addAll(this.circle);
-				else
-					this.sq2.getChildren().addAll(this.line1, this.line2);
-				Step step = new Step(2, match.getSeed().charAt(0));
-				this.doStepRequest(step);
-				this.disableGameTable();
-				this.calculate();
-			} catch (Exception error) {
-				error.printStackTrace();
-				this.sq2.getChildren().clear();
-				App.crt_dlg("error_dialog", new GenericDialogController(error.getMessage()));
+			Match match = ObjectAccessController.getCurrentMatch();
+			if(match != null) {
+				try {
+					if(match.getSeed().compareTo("O") == 0)
+						this.sq2.getChildren().addAll(this.circle);
+					else
+						this.sq2.getChildren().addAll(this.line1, this.line2);
+					Step step = new Step(2, match.getSeed().charAt(0));
+					this.doStepRequest(step);
+					this.disableGameTable();
+					this.calculate();
+				} catch (Exception error) {
+					error.printStackTrace();
+					this.sq2.getChildren().clear();
+					App.crt_dlg("error_dialog", new GenericDialogController(error.getMessage()));
+				}
 			}
 		});
 		
 		this.sq3.setOnMouseClicked(_ -> {
-			Match match = ObjectAccessController.getCurrMatch();
-			try {
-				if(match.getSeed().compareTo("O") == 0)
-					this.sq3.getChildren().addAll(this.circle);
-				else
-					this.sq3.getChildren().addAll(this.line1, this.line2);
-				Step step = new Step(3, match.getSeed().charAt(0));
-				this.doStepRequest(step);
-				this.disableGameTable();
-				this.calculate();
-			} catch (Exception error) {
-				error.printStackTrace();
-				this.sq3.getChildren().clear();
-				App.crt_dlg("error_dialog", new GenericDialogController(error.getMessage()));
+			Match match = ObjectAccessController.getCurrentMatch();
+			if(match != null) {
+				try {
+					if(match.getSeed().compareTo("O") == 0)
+						this.sq3.getChildren().addAll(this.circle);
+					else
+						this.sq3.getChildren().addAll(this.line1, this.line2);
+					Step step = new Step(3, match.getSeed().charAt(0));
+					this.doStepRequest(step);
+					this.disableGameTable();
+					this.calculate();
+				} catch (Exception error) {
+					error.printStackTrace();
+					this.sq3.getChildren().clear();
+					App.crt_dlg("error_dialog", new GenericDialogController(error.getMessage()));
+				}
 			}
 		});
 		
 		this.sq4.setOnMouseClicked(_ -> {
-			Match match = ObjectAccessController.getCurrMatch();
-			try {
-				if(match.getSeed().compareTo("O") == 0)
-					this.sq4.getChildren().addAll(this.circle);
-				else
-					this.sq4.getChildren().addAll(this.line1, this.line2);
-				Step step = new Step(4, match.getSeed().charAt(0));
-				this.doStepRequest(step);
-				this.disableGameTable();
-				this.calculate();
-			} catch (Exception error) {
-				error.printStackTrace();
-				this.sq4.getChildren().clear();
-				App.crt_dlg("error_dialog", new GenericDialogController(error.getMessage()));
+			Match match = ObjectAccessController.getCurrentMatch();
+			if(match != null) {
+				try {
+					if(match.getSeed().compareTo("O") == 0)
+						this.sq4.getChildren().addAll(this.circle);
+					else
+						this.sq4.getChildren().addAll(this.line1, this.line2);
+					Step step = new Step(4, match.getSeed().charAt(0));
+					this.doStepRequest(step);
+					this.disableGameTable();
+					this.calculate();
+				} catch (Exception error) {
+					error.printStackTrace();
+					this.sq4.getChildren().clear();
+					App.crt_dlg("error_dialog", new GenericDialogController(error.getMessage()));
+				}
 			}
 		});
 		
 		this.sq5.setOnMouseClicked(_ -> {
-			Match match = ObjectAccessController.getCurrMatch();
-			try {
-				if(match.getSeed().compareTo("O") == 0)
-					this.sq5.getChildren().addAll(this.circle);
-				else
-					this.sq5.getChildren().addAll(this.line1, this.line2);
-				Step step = new Step(5, match.getSeed().charAt(0));
-				this.doStepRequest(step);
-				this.disableGameTable();
-				this.calculate();
-			} catch (Exception error) {
-				error.printStackTrace();
-				this.sq5.getChildren().clear();
-				App.crt_dlg("error_dialog", new GenericDialogController(error.getMessage()));
+			Match match = ObjectAccessController.getCurrentMatch();
+			if(match != null) {
+				try {
+					if(match.getSeed().compareTo("O") == 0)
+						this.sq5.getChildren().addAll(this.circle);
+					else
+						this.sq5.getChildren().addAll(this.line1, this.line2);
+					Step step = new Step(5, match.getSeed().charAt(0));
+					this.doStepRequest(step);
+					this.disableGameTable();
+					this.calculate();
+				} catch (Exception error) {
+					error.printStackTrace();
+					this.sq5.getChildren().clear();
+					App.crt_dlg("error_dialog", new GenericDialogController(error.getMessage()));
+				}
 			}
 		});
 		
 		this.sq6.setOnMouseClicked(_ -> {
-			Match match = ObjectAccessController.getCurrMatch();
-			try {
-				if(match.getSeed().compareTo("O") == 0)
-					this.sq6.getChildren().addAll(this.circle);
-				else
-					this.sq6.getChildren().addAll(this.line1, this.line2);
-				Step step = new Step(6, match.getSeed().charAt(0));
-				this.doStepRequest(step);
-				this.disableGameTable();
-				this.calculate();
-			} catch (Exception error) {
-				error.printStackTrace();
-				this.sq6.getChildren().clear();
-				App.crt_dlg("error_dialog", new GenericDialogController(error.getMessage()));
+			Match match = ObjectAccessController.getCurrentMatch();
+			if(match != null) {
+				try {
+					if(match.getSeed().compareTo("O") == 0)
+						this.sq6.getChildren().addAll(this.circle);
+					else
+						this.sq6.getChildren().addAll(this.line1, this.line2);
+					Step step = new Step(6, match.getSeed().charAt(0));
+					this.doStepRequest(step);
+					this.disableGameTable();
+					this.calculate();
+				} catch (Exception error) {
+					error.printStackTrace();
+					this.sq6.getChildren().clear();
+					App.crt_dlg("error_dialog", new GenericDialogController(error.getMessage()));
+				}
 			}
 		});
 		
 		this.sq7.setOnMouseClicked(_ -> {
-			Match match = ObjectAccessController.getCurrMatch();
-			try {
-				if(match.getSeed().compareTo("O") == 0)
-					this.sq7.getChildren().addAll(this.circle);
-				else
-					this.sq7.getChildren().addAll(this.line1, this.line2);
-				Step step = new Step(7, match.getSeed().charAt(0));
-				this.doStepRequest(step);
-				this.disableGameTable();
-				this.calculate();
-			} catch (Exception error) {
-				error.printStackTrace();
-				this.sq7.getChildren().clear();
-				App.crt_dlg("error_dialog", new GenericDialogController(error.getMessage()));
+			Match match = ObjectAccessController.getCurrentMatch();
+			if(match != null) {
+				try {
+					if(match.getSeed().compareTo("O") == 0)
+						this.sq7.getChildren().addAll(this.circle);
+					else
+						this.sq7.getChildren().addAll(this.line1, this.line2);
+					Step step = new Step(7, match.getSeed().charAt(0));
+					this.doStepRequest(step);
+					this.disableGameTable();
+					this.calculate();
+				} catch (Exception error) {
+					error.printStackTrace();
+					this.sq7.getChildren().clear();
+					App.crt_dlg("error_dialog", new GenericDialogController(error.getMessage()));
+				}
 			}
 		});
 		
 		this.sq8.setOnMouseClicked(_ -> {
-			Match match = ObjectAccessController.getCurrMatch();
-			try {
-				if(match.getSeed().compareTo("O") == 0)
-					this.sq8.getChildren().addAll(this.circle);
-				else
-					this.sq8.getChildren().addAll(this.line1, this.line2);
-				Step step = new Step(8, match.getSeed().charAt(0));
-				this.doStepRequest(step);
-				this.disableGameTable();
-				this.calculate();
-			} catch (Exception error) {
-				error.printStackTrace();
-				this.sq8.getChildren().clear();
-				App.crt_dlg("error_dialog", new GenericDialogController(error.getMessage()));
+			Match match = ObjectAccessController.getCurrentMatch();
+			if(match != null) {
+				try {
+					if(match.getSeed().compareTo("O") == 0)
+						this.sq8.getChildren().addAll(this.circle);
+					else
+						this.sq8.getChildren().addAll(this.line1, this.line2);
+					Step step = new Step(8, match.getSeed().charAt(0));
+					this.doStepRequest(step);
+					this.disableGameTable();
+					this.calculate();
+				} catch (Exception error) {
+					error.printStackTrace();
+					this.sq8.getChildren().clear();
+					App.crt_dlg("error_dialog", new GenericDialogController(error.getMessage()));
+				}
 			}
 		});
 		
 		this.sq9.setOnMouseClicked(_ -> {
-			Match match = ObjectAccessController.getCurrMatch();
-			try {
-				if(match.getSeed().compareTo("O") == 0)
-					this.sq9.getChildren().addAll(this.circle);
-				else
-					this.sq9.getChildren().addAll(this.line1, this.line2);
-				Step step = new Step(9, match.getSeed().charAt(0));
-				this.doStepRequest(step);
-				this.disableGameTable();
-				this.calculate();
-			} catch (Exception error) {
-				error.printStackTrace();
-				this.sq9.getChildren().clear();
-				App.crt_dlg("error_dialog", new GenericDialogController(error.getMessage()));
+			Match match = ObjectAccessController.getCurrentMatch();
+			if(match != null) {
+				try {
+					if(match.getSeed().compareTo("O") == 0)
+						this.sq9.getChildren().addAll(this.circle);
+					else
+						this.sq9.getChildren().addAll(this.line1, this.line2);
+					Step step = new Step(9, match.getSeed().charAt(0));
+					this.doStepRequest(step);
+					this.disableGameTable();
+					this.calculate();
+				} catch (Exception error) {
+					error.printStackTrace();
+					this.sq9.getChildren().clear();
+					App.crt_dlg("error_dialog", new GenericDialogController(error.getMessage()));
+				}
 			}
 		});
 	}
 	
 	private void doStepRequest(Step step) throws Exception {
-		Match match = ObjectAccessController.getCurrMatch();
-		int status_code = HttpConnection.step_request(match.getMatch_id(), step);
-		if(status_code == 401)
-			throw new Exception(resources.getString(UNAUTHORIZED_USER_ERROR));
+		Match match = ObjectAccessController.getCurrentMatch();
+		if(match != null) {
+			int status_code = HttpConnection.step_request(match.getMatch_id(), step);
+			if(status_code == 401)
+				throw new Exception(resources.getString(UNAUTHORIZED_USER_ERROR));
+		}
 	}
 	
 	private void disableGameTable() {
