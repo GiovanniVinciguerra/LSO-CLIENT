@@ -39,10 +39,10 @@ public class Match {
 		}
 	}
 	
-	private StringProperty player_1 = new SimpleStringProperty(), player_2 = new SimpleStringProperty(), status = new SimpleStringProperty();
-	private String result = null, seed = null;
+	private StringProperty player_1 = new SimpleStringProperty("undefined"), player_2 = new SimpleStringProperty("undefined"), status = new SimpleStringProperty("undefined");
+	private String result = "undefined", seed = "undefined";
 	private ObservableList<Step> steps = FXCollections.observableArrayList();
-	private int match_id;
+	private int match_id = -1;
 	
 	public Match(int match_id, String player_1, String player_2, String status) {
 		this.setMatch_id(match_id);

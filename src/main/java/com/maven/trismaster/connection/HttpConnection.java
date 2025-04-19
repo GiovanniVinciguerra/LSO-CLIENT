@@ -259,9 +259,6 @@ public class HttpConnection {
 			match.setMatch_id(Integer.parseInt(json.get("match_id").asText()));
 			match.setPlayer_1(json.get("player_1").asText());
 			match.setPlayer_2(json.get("player_2").asText());
-			if(match.getPlayer_1().compareTo(User.get_usr_inst().getUsername()) == 0) {
-				
-			}
 			if(match.getPlayer_1().compareTo(User.get_usr_inst().getUsername()) == 0)
 				match.setSeed(json.get("seed_1").asText());
 			else
@@ -275,8 +272,9 @@ public class HttpConnection {
 				Step step = new Step(index, node.get("step").asText().charAt(1));
 				match.getSteps().add(step);
 			});
-			if(match.getSteps().size() < steps.size())
-				match.getSteps().add(steps.getLast());
+			
+			match.getSteps().clear();
+			match.getSteps().addAll(steps);
 		}
 		
 		return status_code;

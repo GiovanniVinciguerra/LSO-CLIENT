@@ -9,6 +9,7 @@ import com.maven.trismaster.entity.Match;
 import com.maven.trismaster.entity.Match.GameValueTable;
 import com.maven.trismaster.entity.Step;
 import com.maven.trismaster.entity.User;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ListView;
@@ -33,12 +34,6 @@ public class GamePanelController implements Initializable {
 		
 		this.container.setItems(ObjectAccessController.getMatches());
 		this.container.setCellFactory(_ -> new GameListCellController());
-		this.container.getSelectionModel().selectedItemProperty().addListener((_, _, selectedItem) -> {
-			if(selectedItem != null && selectedItem.getStatus().compareTo("1") == 0)
-				this.enableGameTable();
-			else
-				this.disableGameTable();
-		});
 		
 		this.disableGameTable();
 		this.prepareGameTable();
@@ -46,6 +41,15 @@ public class GamePanelController implements Initializable {
 		this.circle.setStyle("-fx-fill: #F4F4F4;-fx-stroke: #000000;-fx-stroke-width: 2;");
 		this.line1.setStyle("-fx-stroke: #000000;-fx-stroke-width: 2;");
 		this.line2.setStyle("-fx-stroke: #000000;-fx-stroke-width: 2;");
+		
+		Platform.runLater(() -> {
+			this.container.getSelectionModel().selectedItemProperty().addListener((_, _, selectedItem) -> {
+				if(selectedItem != null && selectedItem.getStatus().compareTo("1") == 0)
+					this.enableGameTable();
+				else
+					this.disableGameTable();
+			});
+		});
 	}
 	
 	private void enableGameTable() {

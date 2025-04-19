@@ -9,7 +9,6 @@ import com.maven.trismaster.entity.Match;
 import com.maven.trismaster.entity.Stat;
 import com.maven.trismaster.entity.Step;
 import com.maven.trismaster.entity.User;
-
 import javafx.application.Platform;
 import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
@@ -21,12 +20,12 @@ import javafx.scene.layout.Pane;
 
 public class GameListCellController extends ListCell<Match> implements Initializable {
 	@FXML Pane tag, notice;
-	@FXML Label player_1, player_2, status;
+	@FXML Label player_1, player_2, status, seed, match_id;
 	@FXML Button refresh;
 	
 	private final String STATUS_PROGRESS = "status.progress", STATUS_WAITING = "status.waiting", STATUS_NEW = "status.new", STATUS_VALIDATION = "status.validation", STATUS_FINISH = "status.finish";
-	private final String PLAYER_UNDEFINED = "player.undefined";
-	private final String PLAYER1 = "player_1", PLAYER2 = "player_2", STATUS = "game.status";
+	private final String UNDEFINED = "undefined";
+	private final String PLAYER1 = "player_1", PLAYER2 = "player_2", STATUS = "game.status", SEED = "seed", MATCHID = "matchid";
 	private final String INFO_NEW_CREATION = "info.creation", INFO_VALIDATION = "info.validation", INFO_WAITING = "info.waiting", UNAUTHORIZED_USER_ERROR = "user.error";
 	private final String WINNER = "game.winner", LOSER = "game.loser", TIE = "game.tie", VALIDATION = "game.validation";
 	private final String REFUSE_MATCH = "refuse.match";
@@ -37,54 +36,12 @@ public class GameListCellController extends ListCell<Match> implements Initializ
 	public void initialize(URL location, ResourceBundle resources) {
 		this.resources = resources;
 		
+		this.match_id.setText(resources.getString(MATCHID) + " " + super.getItem().getMatch_id());
+		this.seed.setText(resources.getString(SEED) + " " + resources.getString(UNDEFINED));
+		
 		this.setPlayer1();
 		this.setPlayer2();
 		this.setStatusTagAndNotice();
-		
-		super.getItem().getPlayer_1Property().addListener(_ -> {
-			System.out.println("Player_1 Property: " + super.getItem() + "\n");
-			Platform.runLater(() -> this.setPlayer1());
-			this.notice.setVisible(true);
-		});
-		super.getItem().getPlayer_2Property().addListener(_ -> {
-			System.out.println("Player_2 Property: " + super.getItem() + "\n");
-			Platform.runLater(() -> this.setPlayer2());
-			this.notice.setVisible(true);
-		});
-		super.getItem().getStatusProperty().addListener(_ -> {
-			System.out.println("Status Property: " + super.getItem() + "\n");
-			Platform.runLater(() -> this.setStatusTagAndNotice());
-		});
-		super.getItem().getSteps().addListener(new ListChangeListener<>() {
-			@Override
-			public void onChanged(Change<? extends Step> change) {
-				if(change.wasAdded())
-					notice.setVisible(true);
-			}
-		});
-		
-		super.selectedProperty().addListener((_, _, isSelected) -> {
-			if(isSelected)  {
-				ObjectAccessController.setCurrMatch(super.getItem());
-				
-				boolean wasInvisible = this.notice.isVisible();
-				
-				if(super.getItem().getStatus().compareTo("4") == 0) {
-					this.notice.setVisible(false);
-					if(wasInvisible)
-						App.crt_dlg("info_dialog", new GenericDialogController(resources.getString(INFO_NEW_CREATION)));
-				} else if(super.getItem().getStatus().compareTo("3") == 0) {
-					this.notice.setVisible(false);
-					if(wasInvisible)
-						App.crt_dlg("info_dialog", new GenericDialogController(resources.getString(INFO_VALIDATION)));
-				} else if(super.getItem().getStatus().compareTo("2") == 0) {
-					this.notice.setVisible(false);
-					if(wasInvisible)
-						App.crt_dlg("info_dialog", new GenericDialogController(resources.getString(INFO_WAITING)));
-				} else if(super.getItem().getStatus().compareTo("1") == 0)
-					this.notice.setVisible(false);
-			}
-		});
 		
 		this.refresh.setOnAction(_ -> {
 			try {
@@ -97,18 +54,64 @@ public class GameListCellController extends ListCell<Match> implements Initializ
 				App.crt_dlg("error_dialog", new GenericDialogController(error.getMessage()));
 			}
 		});
+		
+		Platform.runLater(() -> {
+			if(super.getItem() != null) {
+				super.getItem().getPlayer_1Property().addListener(_ -> {
+					this.setPlayer1();
+					this.notice.setVisible(true);
+				});
+				super.getItem().getPlayer_2Property().addListener(_ -> {
+					this.setPlayer2();
+					this.notice.setVisible(true);
+				});
+				super.getItem().getStatusProperty().addListener(_ -> {
+					this.setStatusTagAndNotice();
+				});
+				super.getItem().getSteps().addListener(new ListChangeListener<>() {
+					@Override
+					public void onChanged(Change<? extends Step> change) {
+						if(change.wasAdded())
+							notice.setVisible(true);
+					}
+				});
+				
+				super.selectedProperty().addListener((_, _, isSelected) -> {
+					if(isSelected)  {
+						ObjectAccessController.setCurrMatch(super.getItem());
+						
+						boolean wasInvisible = this.notice.isVisible();
+						
+						if(super.getItem().getStatus().compareTo("4") == 0) {
+							this.notice.setVisible(false);
+							if(wasInvisible)
+								App.crt_dlg("info_dialog", new GenericDialogController(resources.getString(INFO_NEW_CREATION)));
+						} else if(super.getItem().getStatus().compareTo("3") == 0) {
+							this.notice.setVisible(false);
+							if(wasInvisible)
+								App.crt_dlg("info_dialog", new GenericDialogController(resources.getString(INFO_VALIDATION)));
+						} else if(super.getItem().getStatus().compareTo("2") == 0) {
+							this.notice.setVisible(false);
+							if(wasInvisible)
+								App.crt_dlg("info_dialog", new GenericDialogController(resources.getString(INFO_WAITING)));
+						} else if(super.getItem().getStatus().compareTo("1") == 0)
+							this.notice.setVisible(false);
+					}
+				});
+			}
+		});
 	}
 	
 	private void setPlayer1() {
 		if(super.getItem().player_1_isUndefined())
-			this.player_1.setText(resources.getString(PLAYER1) + " " + resources.getString(PLAYER_UNDEFINED));
+			this.player_1.setText(resources.getString(PLAYER1) + " " + resources.getString(UNDEFINED));
 		else
 			this.player_1.setText(resources.getString(PLAYER1) + " " + super.getItem().getPlayer_1());
 	}
 	
 	private void setPlayer2() {
 		if(super.getItem().player_2_isUndefined())
-			this.player_2.setText(resources.getString(PLAYER2) + " " + resources.getString(PLAYER_UNDEFINED));
+			this.player_2.setText(resources.getString(PLAYER2) + " " + resources.getString(UNDEFINED));
 		else
 			this.player_2.setText(resources.getString(PLAYER2) + " " + super.getItem().getPlayer_2());
 	}
@@ -119,6 +122,7 @@ public class GameListCellController extends ListCell<Match> implements Initializ
 			this.status.setText(this.resources.getString(STATUS) + " " + this.resources.getString(STATUS_PROGRESS));
 			this.tag.setStyle("-fx-background-color: #32CD32;-fx-background-radius: 7 0 0 7;-fx-border-radius: 7 0 0 7;-fx-border-color: none;");
 		} else if(super.getItem().getStatus().compareTo("2") == 0) {
+			this.seed.setText(resources.getString(SEED) + " " + super.getItem().getSeed());
 			this.status.setText(this.resources.getString(STATUS) + " " + this.resources.getString(STATUS_WAITING));
 			this.tag.setStyle("-fx-background-color: #FFA500;-fx-background-radius: 7 0 0 7;-fx-border-radius: 7 0 0 7;-fx-border-color: none;");
 			this.refresh.setVisible(true);
@@ -128,12 +132,13 @@ public class GameListCellController extends ListCell<Match> implements Initializ
 				ObjectAccessController.getMatches().remove(super.getItem());
 			}
 		} else if(super.getItem().getStatus().compareTo("3") == 0) {
+			this.seed.setText(resources.getString(SEED) + " " + super.getItem().getSeed());
 			this.status.setText(this.resources.getString(STATUS) + " " + this.resources.getString(STATUS_VALIDATION));
 			this.tag.setStyle("-fx-background-color: #000000;-fx-background-radius: 7 0 0 7;-fx-border-radius: 7 0 0 7;-fx-border-color: none;");
 			this.refresh.setVisible(true);
 			
 			if(super.getItem().getPlayer_1().compareTo(User.get_usr_inst().getUsername()) == 0)
-				App.crt_dlg("validation_dialog", new ValidationDialogController(this.resources.getString(VALIDATION) + super.getItem().getPlayer_2() + "?"));
+				App.crt_dlg("validation_dialog", new ValidationDialogController(this.resources.getString(VALIDATION) + " " + super.getItem().getPlayer_2() + "?"));
 		} else if(super.getItem().getStatus().compareTo("4") == 0) {
 			this.status.setText(this.resources.getString(STATUS) + " " + this.resources.getString(STATUS_NEW));
 			this.tag.setStyle("-fx-background-color: #1E90FF;-fx-background-radius: 7 0 0 7;-fx-border-radius: 7 0 0 7;-fx-border-color: none;");

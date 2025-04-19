@@ -23,6 +23,8 @@ public class ValidationDialogController extends GenericDialogController implemen
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		super.initialize(location, resources);
+		
 		super.root.getButtonTypes().clear();
 		ButtonType yes_btn = new ButtonType(resources.getString(BTN_YES_TXT), ButtonBar.ButtonData.YES);
 		ButtonType no_btn = new ButtonType(resources.getString(BTN_NO_TXT), ButtonBar.ButtonData.NO);
