@@ -143,10 +143,14 @@ public class GameListCellController extends ListCell<Match> implements Initializ
 		
 		try {
 			if(match == null || empty) {
-				this.player_1.textProperty().unbind();
-				this.player_2.textProperty().unbind();
-				this.status.textProperty().unbind();
-				this.seed.textProperty().unbind();
+				if(this.player_1 != null)
+					this.player_1.textProperty().unbind();
+				if(this.player_2 != null)
+					this.player_2.textProperty().unbind();
+				if(this.status != null)
+					this.status.textProperty().unbind();
+				if(this.seed != null)
+					this.seed.textProperty().unbind();
 				if(this.statusPropertyListener != null)
 					this.status.textProperty().removeListener(this.statusPropertyListener);
 				if(this.cellPropertyListener != null)
