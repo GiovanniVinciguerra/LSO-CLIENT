@@ -63,14 +63,16 @@ public class GameListCellController extends ListCell<Match> implements Initializ
 					}
 					
 					App.crt_dlg("result_dialog", new GenericDialogController(resources.getString(WINNER)));
-				} else if(super.getItem().getResult().compareTo("0") == 0 && super.getItem().getPlayer_1().compareTo(User.get_usr_inst().getUsername()) == 0) {
-					try {
-						int status_code = HttpConnection.tie_request(super.getItem().getMatch_id());
-						if(status_code == 401)
-							throw new Exception(resources.getString(UNAUTHORIZED_USER_ERROR));
-					} catch (Exception error) {
-						error.printStackTrace();
-						App.crt_dlg("error_dialog", new GenericDialogController(error.getMessage()));
+				} else if(super.getItem().getResult().compareTo("0") == 0) {
+					if(super.getItem().getPlayer_1().compareTo(User.get_usr_inst().getUsername()) == 0) {
+						try {
+							int status_code = HttpConnection.tie_request(super.getItem().getMatch_id());
+							if(status_code == 401)
+								throw new Exception(resources.getString(UNAUTHORIZED_USER_ERROR));
+						} catch (Exception error) {
+							error.printStackTrace();
+							App.crt_dlg("error_dialog", new GenericDialogController(error.getMessage()));
+						}
 					}
 					
 					App.crt_dlg("result_dialog", new GenericDialogController(resources.getString(TIE)));

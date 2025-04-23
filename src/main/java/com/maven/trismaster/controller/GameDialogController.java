@@ -39,6 +39,15 @@ public class GameDialogController extends GenericDialogController implements Ini
 							throw new Exception(resources.getString(UNAUTHORIZED_USER_ERROR));
 						this.drawSymbol(row, col, this.match.getSeed().charAt(0));
 						this.match.setTurn(false);
+						if(this.match.isWinner()) {
+							if(this.match.getPlayer_1().compareTo(User.get_usr_inst().getUsername()) == 0)
+								this.match.setResult("1");
+							else
+								this.match.setResult("2");
+							
+							this.match.setStatus("0");
+							App.close_dialog();
+						}
 					} catch (Exception error) {
 						error.printStackTrace();
 						App.crt_dlg("error_dialog", new GenericDialogController(error.getMessage()));
