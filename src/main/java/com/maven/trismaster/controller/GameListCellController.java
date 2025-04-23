@@ -103,20 +103,21 @@ public class GameListCellController extends ListCell<Match> implements Initializ
 		
 		this.cellPropertyListener = (_, _, isSelected) -> {
 			if(isSelected) {					
-				boolean wasInvisible = this.notice.isVisible();
+				boolean wasVisible = this.notice.isVisible();
 				
-				if(super.getItem().getStatus().compareTo("4") == 0)
-					if(wasInvisible)
+				if(super.getItem().getStatus().compareTo("4") == 0) {
+					if(wasVisible)
 						App.crt_dlg("info_dialog", new GenericDialogController(resources.getString(INFO_NEW_CREATION)));
-				else if(super.getItem().getStatus().compareTo("3") == 0)
-					if(wasInvisible)
+				} else if(super.getItem().getStatus().compareTo("3") == 0) {
+					if(wasVisible)
 						App.crt_dlg("info_dialog", new GenericDialogController(resources.getString(INFO_VALIDATION)));
-				else if(super.getItem().getStatus().compareTo("2") == 0)
-					if(wasInvisible)
+				} else if(super.getItem().getStatus().compareTo("2") == 0) {
+					if(wasVisible)
 						App.crt_dlg("info_dialog", new GenericDialogController(resources.getString(INFO_WAITING)));
-				else if(super.getItem().getStatus().compareTo("1") == 0)
-					if(wasInvisible)
+				} else if(super.getItem().getStatus().compareTo("1") == 0) {
+					if(wasVisible)
 						App.crt_dlg("info_dialog", new GenericDialogController(resources.getString(INFO_PROGRESS)));
+				}
 				
 				this.notice.setVisible(false);
 			}

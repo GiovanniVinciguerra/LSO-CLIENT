@@ -56,7 +56,6 @@ public class GameDialogController extends GenericDialogController implements Ini
 			for(int i = 0; i < 3; i++) {
 				for(int j = 0; j < 3; j++) {
 					char value = this.match.getStep(i, j);
-					System.out.println("Row: " + i + " Col: " + j + " Value: " + value);
 					this.drawSymbol(i, j, value);
 				}
 			}
