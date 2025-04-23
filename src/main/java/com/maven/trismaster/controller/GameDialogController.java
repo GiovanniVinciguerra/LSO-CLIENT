@@ -67,7 +67,7 @@ public class GameDialogController extends GenericDialogController implements Ini
 	        /* Disegna la 'X' */
 	        this.table.getGraphicsContext2D().strokeLine(col * 100 + 20, row * 100 + 20, (col + 1) * 100 - 20, (row + 1) * 100 - 20);
 	        this.table.getGraphicsContext2D().strokeLine(col * 100 + 20, (row + 1) * 100 - 20, (col + 1) * 100 - 20, row * 100 + 20);
-	    } else
+	    } else if(value == 'O')
 	        /* Disegna il 'O' */
 	    	this.table.getGraphicsContext2D().strokeOval(col * 100 + 20, row * 100 + 20, 100 - 40, 100 - 40);
 	}
