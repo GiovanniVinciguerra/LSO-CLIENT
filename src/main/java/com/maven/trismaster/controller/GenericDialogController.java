@@ -21,6 +21,8 @@ public class GenericDialogController implements Initializable {
 	
 	private final String BTN_CLOSE_TXT = "close.button";
 	
+	public GenericDialogController() {}
+	
 	public GenericDialogController(String content) {
 		this.content = content;
 	}

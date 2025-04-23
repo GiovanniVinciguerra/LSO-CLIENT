@@ -1,48 +1,92 @@
 package com.maven.trismaster.entity;
 
-import java.util.ArrayList;
+import com.maven.trismaster.App;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 
 public class Match {
-	public static class GameValueTable {
-		private static char[][] values = new char[3][3];
-		private static int lastRow = 0, lastCol = 0;
+	private class MatchSteps {
+		private char[][] steps = new char[3][3];
+		private int lastRow = 0, lastCol = 0;
+		private boolean turn = false;
 		
-		public GameValueTable(ArrayList<Step> steps) {
-			for(Step step : steps) {
-				lastRow = Math.ceilDiv(step.getIndex(), 3) - 1;
-				lastCol = (step.getIndex() - 1) % 3;
-				values[lastRow][lastCol] = step.getSeed();
-			}
+		public MatchSteps() {
+			for(int i = 0; i < 3; i++)
+				for(int j = 0; j < 3; j++)
+					this.steps[i][j] = '\0';
+		}
+		
+		public boolean isYourTurn() {
+			return this.turn;
+		}
+		
+		public void setTurn(boolean turn) {
+			this.turn = turn;
+		}
+		
+		public void setStep(int row, int col, char value) {
+			this.steps[row][col] = value;
+			this.lastRow = row;
+			this.lastCol = col;
+		}
+		
+		public char getStep(int row, int col) {
+			return this.steps[row][col];
+		}
+		
+		public String getStepAsText(int row, int col) {
+			int index = ((row * 3) + col) + 1;
+			char value = this.getStep(row, col);
+			return new String(index + "" + value);
 		}
 		
 		public boolean isWinner() {
 			/* Scorro sulla riga */
-			if(values[lastRow][lastCol] == values[lastRow][(lastCol + 1) % 3] && values[lastRow][lastCol] == values[lastRow][(lastCol + 2) % 3])
+			if(steps[lastRow][lastCol] == steps[lastRow][(lastCol + 1) % 3] && steps[lastRow][lastCol] == steps[lastRow][(lastCol + 2) % 3])
 				return true;
 			/* Scorro sulla colonna */
-			else if(values[lastRow][lastCol] == values[(lastRow + 1) % 3][lastCol] && values[lastRow][lastCol] == values[(lastRow + 2) % 3][lastCol])
+			else if(steps[lastRow][lastCol] == steps[(lastRow + 1) % 3][lastCol] && steps[lastRow][lastCol] == steps[(lastRow + 2) % 3][lastCol])
 				return true;
 			/* Scorre la diagonale principale */
 			if(lastRow == lastCol)
-				if(values[lastRow][lastCol] == values[(lastRow + 1) % 3][(lastCol + 1) % 3] && values[lastRow][lastCol] == values[(lastRow + 2) % 3][(lastCol + 2) % 3])
+				if(steps[lastRow][lastCol] == steps[(lastRow + 1) % 3][(lastCol + 1) % 3] && steps[lastRow][lastCol] == steps[(lastRow + 2) % 3][(lastCol + 2) % 3])
 					return true;
 			/* Scorre la diagonale secondaria */
 			else if((lastRow + lastCol) == 2)
-				if(values[lastRow][lastCol] == values[(lastRow + 1) % 3][(lastCol + 2) % 3] && values[lastRow][lastCol] == values[(lastRow + 2) % 3][(lastCol + 1) % 3])
+				if(steps[lastRow][lastCol] == steps[(lastRow + 1) % 3][(lastCol + 2) % 3] && steps[lastRow][lastCol] == steps[(lastRow + 2) % 3][(lastCol + 1) % 3])
 					return true;
 			
 			return false;
 		}
+		
+		public void translate(String step)  {
+			int index = Character.getNumericValue(step.charAt(0));
+			int row = Math.ceilDiv(index - 1, 3);
+			int col = (index - 1) % 3;
+			char value = step.charAt(1);
+			this.setStep(row, col, value);
+		}
+		
+		public int getStepSize() {
+			int count = 0;
+			
+			for(int i = 0; i < 3; i++)
+				for(int j = 0; j < 3; j++)
+					if(this.steps[i][j] != '\0')
+						count++;
+			
+			return count;
+		}
 	}
 	
-	private StringProperty player_1 = new SimpleStringProperty("undefined"), player_2 = new SimpleStringProperty("undefined"), status = new SimpleStringProperty("undefined");
-	private String result = "undefined", seed = "undefined";
-	private ObservableList<Step> steps = FXCollections.observableArrayList();
+	private StringProperty player_1 = new SimpleStringProperty(), player_2 = new SimpleStringProperty(), literalStatus = new SimpleStringProperty(), seed = new SimpleStringProperty();
+	private String result = "0", status = "4";
 	private int match_id = -1;
+	private boolean player_2Null = true;
+	private MatchSteps steps = new MatchSteps();
+	
+	private final String UNDEFINED = "undefined";
+	private final String STATUS_PROGRESS = "status.progress", STATUS_WAITING = "status.waiting", STATUS_NEW = "status.new", STATUS_VALIDATION = "status.validation", STATUS_FINISH = "status.finish";
 	
 	public Match(int match_id, String player_1, String player_2, String status) {
 		this.setMatch_id(match_id);
@@ -51,12 +95,36 @@ public class Match {
 		this.setStatus(status);
 	}
 	
-	public boolean player_1_isUndefined() {
-		return this.getPlayer_1() == null || this.getPlayer_1().isEmpty() || this.getPlayer_1().isBlank();
+	public void translate(String step) {
+		this.steps.translate(step);
 	}
 	
-	public boolean player_2_isUndefined() {
-		return this.getPlayer_2() == null || this.getPlayer_2().isEmpty() || this.getPlayer_2().isBlank();
+	public int getStepSize() {
+		return this.steps.getStepSize();
+	}
+	
+	public String getStepAsText(int row, int col) {
+		return this.steps.getStepAsText(row, col);
+	}
+	
+	public boolean isYourturn() {
+		return this.steps.isYourTurn();
+	}
+	
+	public void setTurn(boolean turn) {
+		this.steps.setTurn(turn);
+	}
+	
+	public char getStep(int row, int col) {
+		return this.steps.getStep(row, col);
+	}
+	
+	public boolean isWinner() {
+		return this.steps.isWinner();
+	}
+	
+	public void setStep(int row, int col, char value) {
+		this.steps.setStep(row, col, value);
 	}
 	
 	public StringProperty getPlayer_1Property() {
@@ -68,7 +136,10 @@ public class Match {
 	}
 
 	public void setPlayer_1(String player_1) {
-		this.player_1.set(player_1);
+		if(player_1 == null || player_1.isEmpty() || player_1.isBlank())
+			this.player_1.set(App.get_resource_key(UNDEFINED));
+		else
+			this.player_1.set(player_1);
 	}
 	
 	public StringProperty getPlayer_2Property() {
@@ -80,19 +151,47 @@ public class Match {
 	}
 
 	public void setPlayer_2(String player_2) {
-		this.player_2.set(player_2);
+		if(player_2 == null || player_2.isEmpty() || player_2.isBlank()) {
+			this.player_2.set(App.get_resource_key(UNDEFINED));
+			this.player_2Null = true;
+		} else {
+			this.player_2.set(player_2);
+			this.player_2Null = false;
+		}
 	}
 	
-	public StringProperty getStatusProperty() {
-		return this.status;
+	public boolean isPlayer2Null() {
+		return this.player_2Null;
 	}
 
 	public String getStatus() {
-		return this.status.get();
+		return this.status;
 	}
 
 	public void setStatus(String status) {
-		this.status.set(status);
+		this.status = status;
+		this.setLiteralStatus(status);
+	}
+	
+	public StringProperty getLiteralStatusProperty() {
+		return this.literalStatus;
+	}
+	
+	public String getLiteralStatus() {
+		return this.literalStatus.get();
+	}
+	
+	private void setLiteralStatus(String status) {
+		if(status.compareTo("0") == 0)
+			this.literalStatus.set(App.get_resource_key(STATUS_FINISH));
+		else if(status.compareTo("1") == 0)
+			this.literalStatus.set(App.get_resource_key(STATUS_PROGRESS));
+		else if(status.compareTo("2") == 0)
+			this.literalStatus.set(App.get_resource_key(STATUS_WAITING));
+		else if(status.compareTo("3") == 0)
+			this.literalStatus.set(App.get_resource_key(STATUS_VALIDATION));
+		else if(status.compareTo("4") == 0)
+			this.literalStatus.set(App.get_resource_key(STATUS_NEW));
 	}
 
 	public String getResult() {
@@ -102,17 +201,20 @@ public class Match {
 	public void setResult(String result) {
 		this.result = result;
 	}
-
-	public ObservableList<Step> getSteps() {
-		return this.steps;
-	}
 	
-	public String getSeed() {
+	public StringProperty getSeedProperty() {
 		return this.seed;
 	}
 	
+	public String getSeed() {
+		return this.seed.get();
+	}
+	
 	public void setSeed(String seed) {
-		this.seed = seed;
+		if(seed == null || seed.isEmpty() || seed.isBlank())
+			this.seed.set(App.get_resource_key(UNDEFINED));
+		else
+			this.seed.set(seed);
 	}
 
 	public int getMatch_id() {
@@ -123,9 +225,5 @@ public class Match {
 		this.match_id = match_id;
 	}
 
-	@Override
-	public String toString() {
-		return String.format("Match [match_id = %s, player_1 = %s, player_2 = %s, status = %s, seed = s, result = %s, steps = %s]", this.getMatch_id(), this.getPlayer_1(),
-				this.getPlayer_2(), this.getStatus(), this.getSeed(), this.getResult(), this.getSteps());
-	}
+	
 }

@@ -23,7 +23,7 @@ public class ObjectAccessController {
 		return matches;
 	}
 	
-	public static Match getCurrentMatch() {
+	public static Match getProgressMatch() {
 		Match match = null;
 		
 		for(Match item : matches) {

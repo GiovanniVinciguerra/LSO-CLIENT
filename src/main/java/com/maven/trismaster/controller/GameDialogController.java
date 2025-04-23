@@ -1,0 +1,67 @@
+package com.maven.trismaster.controller;
+
+import java.net.URL;
+import java.util.ResourceBundle;
+import com.maven.trismaster.App;
+import com.maven.trismaster.connection.HttpConnection;
+import com.maven.trismaster.entity.Match;
+import com.maven.trismaster.entity.User;
+import javafx.application.Platform;
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.canvas.Canvas;
+
+public class GameDialogController extends GenericDialogController implements Initializable {
+	@FXML Canvas table;
+	
+	private Match match = ObjectAccessController.getProgressMatch();
+	private final String UNAUTHORIZED_USER_ERROR = "user.error";
+	
+	@Override
+	public void initialize(URL location, ResourceBundle resources) {
+		super.initialize(location, resources);
+		
+		this.table.getGraphicsContext2D().setLineWidth(2);
+		for(int i = 1; i < 3; i++) {
+			this.table.getGraphicsContext2D().strokeLine(i * 100, 0, i * 100, 300); /* Linee verticali */
+			this.table.getGraphicsContext2D().strokeLine(0, i * 100, 300, i * 100); /* Linee orizzontali */
+		}
+		
+		this.table.setOnMouseClicked(event -> {
+			int col = (int) (event.getX() / 300);
+			int row = (int) (event.getY() / 300);
+			
+			if(this.match.getStep(row, col) == '\0') {
+				if(this.match.isYourturn())
+					try {
+						int status_code = HttpConnection.step_request(this.match.getMatch_id(), this.match.getStepAsText(row, col));
+						if(status_code == 401)
+							throw new Exception(resources.getString(UNAUTHORIZED_USER_ERROR));
+						this.drawSymbol(row, col, this.match.getSeed().charAt(0));
+						this.match.setTurn(false);
+					} catch (Exception error) {
+						error.printStackTrace();
+						App.crt_dlg("error_dialog", new GenericDialogController(error.getMessage()));
+					}
+			}
+		});
+		
+		Platform.runLater(() -> {
+			/* Controlla se è il turno del player1 o del player2 */
+			if((this.match.getStepSize() % 2) == 0 && this.match.getPlayer_1().compareTo(User.get_usr_inst().getUsername()) == 0)
+				this.match.setTurn(true);
+			else if((this.match.getStepSize() % 2) != 0 && this.match.getPlayer_2().compareTo(User.get_usr_inst().getUsername()) == 0)
+				this.match.setTurn(true);
+		});
+	}
+	
+	private void drawSymbol(int row, int col, char value) {
+	    if (value == 'X') {
+	        /* Disegna la 'X' */
+	        this.table.getGraphicsContext2D().strokeLine(col * 300 + 20, row * 300 + 20, (col + 1) * 300 - 20, (row + 1) * 300 - 20);
+	        this.table.getGraphicsContext2D().strokeLine(col * 300 + 20, (row + 1) * 300 - 20, (col + 1) * 300 - 20, row * 300 + 20);
+	    } else
+	        /* Disegna il 'O' */
+	    	this.table.getGraphicsContext2D().strokeOval(col * 300 + 20, row * 300 + 20, 300 - 40, 300 - 40);
+	}
+}

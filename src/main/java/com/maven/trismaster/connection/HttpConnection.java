@@ -1,6 +1,5 @@
 package com.maven.trismaster.connection;
 
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import org.apache.hc.client5.http.classic.methods.HttpPost;
@@ -16,8 +15,9 @@ import com.maven.trismaster.controller.ObjectAccessController;
 import com.maven.trismaster.entity.Match;
 import com.maven.trismaster.entity.Message;
 import com.maven.trismaster.entity.Stat;
-import com.maven.trismaster.entity.Step;
 import com.maven.trismaster.entity.User;
+
+import javafx.application.Platform;
 
 public class HttpConnection {
 	private static final String URL = "http://trismaster.ddns.net:8080/";
@@ -256,37 +256,32 @@ public class HttpConnection {
 		if(status_code == 200) {
 			JsonNode json = mapper.readTree(body);
 			
-			match.setMatch_id(Integer.parseInt(json.get("match_id").asText()));
-			match.setPlayer_1(json.get("player_1").asText());
-			match.setPlayer_2(json.get("player_2").asText());
-			if(match.getPlayer_1().compareTo(User.get_usr_inst().getUsername()) == 0)
-				match.setSeed(json.get("seed_1").asText());
-			else
-				match.setSeed(json.get("seed_2").asText());
-			match.setResult(json.get("result").asText());
-			match.setStatus(json.get("status").asText());
-			ArrayList<Step> steps = new ArrayList<>();
-			JsonNode json_steps = json.get("steps");
-			json_steps.forEach(node -> {
-				int index = Character.getNumericValue(node.get("step").asText().charAt(0));
-				Step step = new Step(index, node.get("step").asText().charAt(1));
-				match.getSteps().add(step);
+			Platform.runLater(() -> {
+				match.setMatch_id(Integer.parseInt(json.get("match_id").asText()));
+				match.setPlayer_1(json.get("player_1").asText());
+				match.setPlayer_2(json.get("player_2").asText());
+				if(match.getPlayer_1().compareTo(User.get_usr_inst().getUsername()) == 0)
+					match.setSeed(json.get("seed_1").asText());
+				else
+					match.setSeed(json.get("seed_2").asText());
+				match.setResult(json.get("result").asText());
+				match.setStatus(json.get("status").asText());
+				JsonNode json_steps = json.get("steps");
+				if(json_steps != null)
+					json_steps.forEach(node -> match.translate(node.get("step").asText()));
 			});
-			
-			match.getSteps().clear();
-			match.getSteps().addAll(steps);
 		}
 		
 		return status_code;
 	}
 	
-	public static int step_request(int match_id, Step step) throws Exception {
+	public static int step_request(int match_id, String step) throws Exception {
 		ObjectMapper mapper = new ObjectMapper();
         Map<String, String> data = new LinkedHashMap<>();
         data.put("session_id", Integer.toString(User.get_usr_inst().getSessionId()));
 		data.put("username", User.get_usr_inst().getUsername());
 		data.put("match_id", Integer.toString(match_id));
-		data.put("step", step.getIndex() + "" + step.getSeed());
+		data.put("step", step);
 		String json_body = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(data);
 		
 		CloseableHttpClient client = HttpClients.createDefault();
@@ -300,9 +295,9 @@ public class HttpConnection {
 		int status_code = response.getCode();
 		
 		if(status_code == 200) {
-			Match match = ObjectAccessController.getCurrentMatch();
+			Match match = ObjectAccessController.getProgressMatch();
 			if(match != null)
-				match.getSteps().add(step);
+				match.translate(step);
 		}
 		
 		return status_code;
@@ -407,13 +402,8 @@ public class HttpConnection {
 					load_match.setSeed(match.get("seed_2").asText());
 				load_match.setResult(match.get("result").asText());
 				JsonNode stepsNode = json.get("steps");
-				if(stepsNode != null) {
-					stepsNode.forEach(node -> {
-						int index = Character.getNumericValue(node.get("step").asText().charAt(0));
-						Step step = new Step(index, node.get("step").asText().charAt(1));
-						load_match.getSteps().add(step);
-					});
-				}
+				if(stepsNode != null)
+					stepsNode.forEach(node -> load_match.translate(node.get("step").asText()));
 				ObjectAccessController.getMatches().add(load_match);
 			});
 		}
