@@ -34,9 +34,8 @@ public class Match {
 			return this.steps[row][col];
 		}
 		
-		public String getStepAsText(int row, int col) {
+		public String getStepAsText(int row, int col, char value) {
 			int index = ((row * 3) + col) + 1;
-			char value = this.getStep(row, col);
 			return new String(index + "" + value);
 		}
 		
@@ -103,8 +102,8 @@ public class Match {
 		return this.steps.getStepSize();
 	}
 	
-	public String getStepAsText(int row, int col) {
-		return this.steps.getStepAsText(row, col);
+	public String getStepAsText(int row, int col, char value) {
+		return this.steps.getStepAsText(row, col, value);
 	}
 	
 	public boolean isYourturn() {

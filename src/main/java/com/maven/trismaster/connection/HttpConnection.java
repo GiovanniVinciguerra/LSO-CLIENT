@@ -295,9 +295,11 @@ public class HttpConnection {
 		int status_code = response.getCode();
 		
 		if(status_code == 200) {
-			Match match = ObjectAccessController.getProgressMatch();
-			if(match != null)
-				match.translate(step);
+			Platform.runLater(() -> {
+				Match match = ObjectAccessController.getProgressMatch();
+				if(match != null)
+					match.translate(step);
+			});
 		}
 		
 		return status_code;

@@ -34,7 +34,7 @@ public class GameDialogController extends GenericDialogController implements Ini
 			if(this.match.getStep(row, col) == '\0') {
 				if(this.match.isYourturn())
 					try {
-						int status_code = HttpConnection.step_request(this.match.getMatch_id(), this.match.getStepAsText(row, col));
+						int status_code = HttpConnection.step_request(this.match.getMatch_id(), this.match.getStepAsText(row, col, this.match.getSeed().charAt(0)));
 						if(status_code == 401)
 							throw new Exception(resources.getString(UNAUTHORIZED_USER_ERROR));
 						this.drawSymbol(row, col, this.match.getSeed().charAt(0));
@@ -52,6 +52,13 @@ public class GameDialogController extends GenericDialogController implements Ini
 				this.match.setTurn(true);
 			else if((this.match.getStepSize() % 2) != 0 && this.match.getPlayer_2().compareTo(User.get_usr_inst().getUsername()) == 0)
 				this.match.setTurn(true);
+			
+			for(int i = 0; i < 3; i++) {
+				for(int j = 0; j < 3; j++) {
+					char value = this.match.getStep(i, j);
+					this.drawSymbol(i, j, value);
+				}
+			}
 		});
 	}
 	
