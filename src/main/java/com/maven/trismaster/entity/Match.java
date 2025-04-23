@@ -60,7 +60,7 @@ public class Match {
 		
 		public void translate(String step)  {
 			int index = Character.getNumericValue(step.charAt(0));
-			int row = Math.ceilDiv(index - 1, 3);
+			int row = Math.ceilDiv(index, 3) - 1;
 			int col = (index - 1) % 3;
 			char value = step.charAt(1);
 			this.setStep(row, col, value);
