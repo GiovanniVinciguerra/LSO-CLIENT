@@ -47,6 +47,10 @@ public class GameDialogController extends GenericDialogController implements Ini
 							
 							this.match.setStatus("0");
 							App.close_dialog();
+						} else if(this.match.getStepSize() == 9) {
+							this.match.setResult("0");
+							this.match.setStatus("0");
+							App.close_dialog();
 						}
 					} catch (Exception error) {
 						error.printStackTrace();
