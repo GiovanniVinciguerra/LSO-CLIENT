@@ -28,8 +28,8 @@ public class GameDialogController extends GenericDialogController implements Ini
 		}
 		
 		this.table.setOnMouseClicked(event -> {
-			int col = (int) (event.getX() / 300);
-			int row = (int) (event.getY() / 300);
+			int col = (int) (event.getX() / 100);
+			int row = (int) (event.getY() / 100);
 			
 			if(this.match.getStep(row, col) == '\0') {
 				if(this.match.isYourturn())
@@ -58,10 +58,10 @@ public class GameDialogController extends GenericDialogController implements Ini
 	private void drawSymbol(int row, int col, char value) {
 	    if (value == 'X') {
 	        /* Disegna la 'X' */
-	        this.table.getGraphicsContext2D().strokeLine(col * 300 + 20, row * 300 + 20, (col + 1) * 300 - 20, (row + 1) * 300 - 20);
-	        this.table.getGraphicsContext2D().strokeLine(col * 300 + 20, (row + 1) * 300 - 20, (col + 1) * 300 - 20, row * 300 + 20);
+	        this.table.getGraphicsContext2D().strokeLine(col * 100 + 20, row * 100 + 20, (col + 1) * 100 - 20, (row + 1) * 100 - 20);
+	        this.table.getGraphicsContext2D().strokeLine(col * 100 + 20, (row + 1) * 100 - 20, (col + 1) * 100 - 20, row * 100 + 20);
 	    } else
 	        /* Disegna il 'O' */
-	    	this.table.getGraphicsContext2D().strokeOval(col * 300 + 20, row * 300 + 20, 300 - 40, 300 - 40);
+	    	this.table.getGraphicsContext2D().strokeOval(col * 100 + 20, row * 100 + 20, 100 - 40, 100 - 40);
 	}
 }
