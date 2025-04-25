@@ -98,9 +98,9 @@ public class Match {
 			else if((lastRow + lastCol) == 2) {
 				if(steps[lastRow][lastCol] == steps[(lastRow + 1) % 3][(lastCol + 2) % 3] && steps[lastRow][lastCol] == steps[(lastRow + 2) % 3][(lastCol + 1) % 3]) {
 					int minRow = Math.min(this.lastRow, Math.min((this.lastRow + 1) % 3, (this.lastRow + 2) % 3));
-					int minCol = Math.min(this.lastCol, Math.min((this.lastCol + 1) % 3, (this.lastCol + 2) % 3));
+					int minCol = Math.max(this.lastCol, Math.max((this.lastCol + 1) % 3, (this.lastCol + 2) % 3));
 					int maxRow = Math.max(this.lastRow, Math.max((this.lastRow + 1) % 3, (this.lastRow + 2) % 3));
-					int maxCol = Math.max(this.lastCol, Math.max((this.lastCol + 1) % 3, (this.lastCol + 2) % 3));
+					int maxCol = Math.min(this.lastCol, Math.min((this.lastCol + 1) % 3, (this.lastCol + 2) % 3));
 					this.calcXY(minRow, maxRow, minCol, maxCol);
 					return true;
 				}
