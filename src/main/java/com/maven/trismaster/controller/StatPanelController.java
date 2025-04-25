@@ -21,6 +21,19 @@ public class StatPanelController implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		/* Inizializzazione delle statistiche */
+		this.total.setText("0");
+		this.stat.setText(
+			resources.getString(STAT_WIN) +
+			"\t" +
+			String.format("%.2f", 0.0) +
+			"%\t\t" +
+			resources.getString(STAT_LOSE) +
+			"\t" +
+			String.format("%.2f", 0.0) +
+			"%"
+		);
+		
 		ObjectAccessController.getStats().addListener((ListChangeListener<Stat>) change -> {
 			change.next();
 			if(change.wasAdded()) {
@@ -67,18 +80,6 @@ public class StatPanelController implements Initializable {
 		Platform.runLater(() -> {
 			String complete_title = User.get_usr_inst().getName() + this.title.getText();
 			title.setText(complete_title);
-			/* Inizializzazione delle statistiche */
-			this.total.setText("0");
-			this.stat.setText(
-				resources.getString(STAT_WIN) +
-				"\t" +
-				String.format("%.2f", 0.0) +
-				"%\t\t" +
-				resources.getString(STAT_LOSE) +
-				"\t" +
-				String.format("%.2f", 0.0) +
-				"%"
-			);
 		});
 	}
 
