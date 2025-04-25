@@ -1,5 +1,7 @@
 package com.maven.trismaster.entity;
 
+import java.util.Objects;
+
 import com.maven.trismaster.App;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -289,5 +291,29 @@ public class Match {
 
 	public void setMatch_id(int match_id) {
 		this.match_id = match_id;
+	}
+	
+	
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(match_id);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null || getClass() != obj.getClass())
+			return false;
+		
+		Match other = (Match) obj;
+		return this.match_id == other.match_id;
+	}
+
+	@Override
+	public String toString() {
+		return String.format("Match [player_1=%s, player_2=%s, literalStatus=%s, seed=%s, result=%s, match_id=%s]",
+				player_1, player_2, literalStatus, seed, result, match_id);
 	}
 }

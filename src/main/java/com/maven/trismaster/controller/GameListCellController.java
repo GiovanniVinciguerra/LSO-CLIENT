@@ -8,6 +8,8 @@ import com.maven.trismaster.connection.HttpConnection;
 import com.maven.trismaster.entity.Match;
 import com.maven.trismaster.entity.Stat;
 import com.maven.trismaster.entity.User;
+
+import javafx.application.Platform;
 import javafx.beans.InvalidationListener;
 import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
@@ -81,9 +83,26 @@ public class GameListCellController extends ListCell<Match> implements Initializ
 				
 				Stat stat = new Stat(super.getItem().getPlayer_1(), super.getItem().getPlayer_2(), super.getItem().getResult());
 				ObjectAccessController.getStats().add(stat);
-				ObjectAccessController.getMatches().remove(super.getItem());
-			}
-			else if(super.getItem().getStatus().compareTo("1") == 0)
+				
+				Match match = ObjectAccessController.getNewCreationMatch();
+				if(match != null) {
+					try {
+						int status_code = HttpConnection.waiting_request(match);
+						if(status_code == 200)
+							match.setStatus("2");
+						else if(status_code == 401)
+							throw new Exception(resources.getString(UNAUTHORIZED_USER_ERROR));
+					} catch (Exception error) {
+						error.printStackTrace();
+						App.crt_dlg("error_dialog", new GenericDialogController(error.getMessage()));
+					}
+				}
+				
+				Platform.runLater(() -> {
+					ObjectAccessController.getMatches().remove(ObjectAccessController.getFinishMatch());
+					super.getListView().refresh();
+				});
+			} else if(super.getItem().getStatus().compareTo("1") == 0)
 				this.tag.setStyle("-fx-background-color: #32CD32;-fx-background-radius: 7 0 0 7;-fx-border-radius: 7 0 0 7;-fx-border-color: none;");
 			else if(super.getItem().getStatus().compareTo("2") == 0) {
 				this.tag.setStyle("-fx-background-color: #FFA500;-fx-background-radius: 7 0 0 7;-fx-border-radius: 7 0 0 7;-fx-border-color: none;");
@@ -91,14 +110,12 @@ public class GameListCellController extends ListCell<Match> implements Initializ
 					App.crt_dlg("info_dialog", new GenericDialogController(resources.getString(REFUSE_MATCH)));
 					ObjectAccessController.getMatches().remove(super.getItem());
 				}
-			}
-			else if(super.getItem().getStatus().compareTo("3") == 0) {
+			} else if(super.getItem().getStatus().compareTo("3") == 0) {
 				this.tag.setStyle("-fx-background-color: #000000;-fx-background-radius: 7 0 0 7;-fx-border-radius: 7 0 0 7;-fx-border-color: none;");
 				/* Fa apparire al player_1 il dialog di conferma per giocare o meno la partita */
 				if(super.getItem().getPlayer_1().compareTo(User.get_usr_inst().getUsername()) == 0)
 					App.crt_dlg("validation_dialog", new ValidationDialogController(resources.getString(VALIDATION) + " " + this.player_2.getText() + "?"));
-			}
-			else if(super.getItem().getStatus().compareTo("4") == 0)
+			} else if(super.getItem().getStatus().compareTo("4") == 0)
 				this.tag.setStyle("-fx-background-color: #1E90FF;-fx-background-radius: 7 0 0 7;-fx-border-radius: 7 0 0 7;-fx-border-color: none;");
 		};
 		this.status.textProperty().addListener(this.statusPropertyListener);

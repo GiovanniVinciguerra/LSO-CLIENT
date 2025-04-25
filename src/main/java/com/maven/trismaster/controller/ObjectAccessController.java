@@ -23,6 +23,19 @@ public class ObjectAccessController {
 		return matches;
 	}
 	
+	public static Match getNewCreationMatch() {
+		Match match = null;
+		
+		for(Match item : matches) {
+			if(item.getStatus().compareTo("4") == 0) {
+				match = item;
+				break;
+			}
+		}
+			
+		return match;
+	}
+	
 	public static Match getProgressMatch() {
 		Match match = null;
 		
@@ -41,6 +54,19 @@ public class ObjectAccessController {
 		
 		for(Match item : matches) {
 			if(item.getStatus().compareTo("3") == 0) {
+				match = item;
+				break;
+			}
+		}
+			
+		return match;
+	}
+	
+	public static Match getFinishMatch() {
+		Match match = null;
+		
+		for(Match item : matches) {
+			if(item.getStatus().compareTo("0") == 0) {
 				match = item;
 				break;
 			}
