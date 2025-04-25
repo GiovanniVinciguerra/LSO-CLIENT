@@ -5,10 +5,15 @@ import java.util.ResourceBundle;
 import com.maven.trismaster.App;
 import com.maven.trismaster.connection.HttpConnection;
 import com.maven.trismaster.entity.Match;
-
+import com.maven.trismaster.entity.User;
+import javafx.application.Platform;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Label;
 
 public class HomeController implements Initializable {
+	@FXML Label session_id;
+	
 	private final String UNAUTHORIZED_USER_ERROR = "user.error";
 
 	@Override
@@ -27,5 +32,7 @@ public class HomeController implements Initializable {
 			error.printStackTrace();
 			App.crt_dlg("error_dialog", new GenericDialogController(error.getMessage()));
 		}
+		
+		Platform.runLater(() -> this.session_id.setText(String.valueOf(User.get_usr_inst().getSessionId())));
 	}
 }

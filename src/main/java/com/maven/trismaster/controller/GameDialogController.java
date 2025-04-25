@@ -10,6 +10,7 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.paint.Color;
 
 public class GameDialogController extends GenericDialogController implements Initializable {
 	@FXML Canvas table;
@@ -40,17 +41,16 @@ public class GameDialogController extends GenericDialogController implements Ini
 						this.drawSymbol(row, col, this.match.getSeed().charAt(0));
 						this.match.setTurn(false);
 						if(this.match.isWinner()) {
+							this.drawLine();
 							if(this.match.getPlayer_1().compareTo(User.get_usr_inst().getUsername()) == 0)
 								this.match.setResult("1");
 							else
 								this.match.setResult("2");
 							
 							this.match.setStatus("0");
-							App.close_dialog();
 						} else if(this.match.getStepSize() == 9) {
 							this.match.setResult("0");
 							this.match.setStatus("0");
-							App.close_dialog();
 						}
 					} catch (Exception error) {
 						error.printStackTrace();
@@ -83,5 +83,11 @@ public class GameDialogController extends GenericDialogController implements Ini
 	    } else if(value == 'O')
 	        /* Disegna il 'O' */
 	    	this.table.getGraphicsContext2D().strokeOval(col * 100 + 20, row * 100 + 20, 100 - 40, 100 - 40);
+	}
+	
+	private void drawLine() {
+		this.table.getGraphicsContext2D().setLineWidth(5);
+		this.table.getGraphicsContext2D().setStroke(Color.RED);
+		this.table.getGraphicsContext2D().strokeLine(this.match.getStartX(), this.match.getStartY(), this.match.getEndX(), this.match.getEndY());
 	}
 }

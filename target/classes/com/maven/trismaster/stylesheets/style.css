@@ -7,7 +7,7 @@ ListView {
 ListView .list-cell {
 	-fx-text-fill: black;
 	-fx-font-family: "Roboto";
-	-fx-font-size: 12px;
+	-fx-font-size: 14px;
 	-fx-alignment: center-left;
 }
 
@@ -34,5 +34,5 @@ ListView .scroll-bar:horizontal {
 .list-cell:filled:selected,
 .list-cell:even,
 .list-cell:odd {
-    -fx-background-color: rgba(0,0,0,0);
+  -fx-background-color: transparent;
 }

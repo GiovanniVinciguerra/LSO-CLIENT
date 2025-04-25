@@ -124,6 +124,8 @@ public class HttpConnection {
 		
 		if(status_code == 200) {
 			JsonNode json = mapper.readTree(body);
+			
+			/* Pulizia dei vecchi messaggi */
 			ObjectAccessController.getMessages().clear();
 			
 			/* Aggiunta dei messaggi ottenuti alla lista dei messaggi gestiti da ObjectAccessController */
@@ -256,6 +258,7 @@ public class HttpConnection {
 		if(status_code == 200) {
 			JsonNode json = mapper.readTree(body);
 			
+			/* Qui si istruisce un thread secondario a gestire la risposta asincrona di HttpConnection */
 			Platform.runLater(() -> {
 				match.setMatch_id(Integer.parseInt(json.get("match_id").asText()));
 				match.setPlayer_1(json.get("player_1").asText());
@@ -295,11 +298,9 @@ public class HttpConnection {
 		int status_code = response.getCode();
 		
 		if(status_code == 200) {
-			Platform.runLater(() -> {
-				Match match = ObjectAccessController.getProgressMatch();
-				if(match != null)
-					match.translate(step);
-			});
+			Match match = ObjectAccessController.getProgressMatch();
+			if(match != null)
+				match.translate(step);
 		}
 		
 		return status_code;

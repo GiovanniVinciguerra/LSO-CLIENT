@@ -8,6 +8,7 @@ public class Match {
 	private class MatchSteps {
 		private char[][] steps = new char[3][3];
 		private int lastRow = 0, lastCol = 0;
+		private double startX = 0, startY = 0, endX = 0, endY = 0; /* Permette di ottenere le coordinate delle celle vincenti */
 		private boolean turn = false;
 		
 		public MatchSteps() {
@@ -39,21 +40,71 @@ public class Match {
 			return new String(index + "" + value);
 		}
 		
+		public double getStartX() {
+			return this.startX;
+		}
+		
+		public double getStartY() {
+			return this.startY;
+		}
+		
+		public double getEndX() {
+			return this.endX;
+		}
+		
+		public double getEndY() {
+			return this.endY;
+		}
+		
+		private void calcXY(int minRow, int maxRow, int minCol, int maxCol) {
+			this.startX = (double) minCol * 100 + 100 / 2;
+			this.startY = (double) minRow * 100 + 100 / 2;
+			this.endX = (double) maxCol * 100 + 100 / 2;
+			this.endY = (double) maxRow * 100 + 100 / 2;
+		}
+		
 		public boolean isWinner() {
 			/* Scorro sulla riga */
-			if(steps[lastRow][lastCol] == steps[lastRow][(lastCol + 1) % 3] && steps[lastRow][lastCol] == steps[lastRow][(lastCol + 2) % 3])
+			if(steps[lastRow][lastCol] == steps[lastRow][(lastCol + 1) % 3] && steps[lastRow][lastCol] == steps[lastRow][(lastCol + 2) % 3]) {
+				/* Calcolo le coordinate delle celle vincitrici */
+				int minRow = this.lastRow;
+				int minCol = Math.min(this.lastCol, Math.min((this.lastCol + 1) % 3, (this.lastCol + 2) % 3));
+				int maxRow = this.lastRow;
+				int maxCol = Math.max(this.lastCol, Math.max((this.lastCol + 1) % 3, (this.lastCol + 2) % 3));
+				this.calcXY(minRow, maxRow, minCol, maxCol);
 				return true;
+			}
 			/* Scorro sulla colonna */
-			else if(steps[lastRow][lastCol] == steps[(lastRow + 1) % 3][lastCol] && steps[lastRow][lastCol] == steps[(lastRow + 2) % 3][lastCol])
+			else if(steps[lastRow][lastCol] == steps[(lastRow + 1) % 3][lastCol] && steps[lastRow][lastCol] == steps[(lastRow + 2) % 3][lastCol]) {
+				int minRow = Math.min(this.lastRow, Math.min((this.lastRow + 1) % 3, (this.lastRow + 2) % 3));
+				int minCol = this.lastCol;
+				int maxRow = Math.max(this.lastRow, Math.max((this.lastRow + 1) % 3, (this.lastRow + 2) % 3));
+				int maxCol = this.lastCol;
+				this.calcXY(minRow, maxRow, minCol, maxCol);
 				return true;
+			}
 			/* Scorre la diagonale principale */
-			if(lastRow == lastCol)
-				if(steps[lastRow][lastCol] == steps[(lastRow + 1) % 3][(lastCol + 1) % 3] && steps[lastRow][lastCol] == steps[(lastRow + 2) % 3][(lastCol + 2) % 3])
+			if(lastRow == lastCol) {
+				if(steps[lastRow][lastCol] == steps[(lastRow + 1) % 3][(lastCol + 1) % 3] && steps[lastRow][lastCol] == steps[(lastRow + 2) % 3][(lastCol + 2) % 3]) {
+					int minRow = Math.min(this.lastRow, Math.min((this.lastRow + 1) % 3, (this.lastRow + 2) % 3));
+					int minCol = Math.min(this.lastCol, Math.min((this.lastCol + 1) % 3, (this.lastCol + 2) % 3));
+					int maxRow = Math.max(this.lastRow, Math.max((this.lastRow + 1) % 3, (this.lastRow + 2) % 3));
+					int maxCol = Math.max(this.lastCol, Math.max((this.lastCol + 1) % 3, (this.lastCol + 2) % 3));
+					this.calcXY(minRow, maxRow, minCol, maxCol);
 					return true;
+				}
+			}
 			/* Scorre la diagonale secondaria */
-			else if((lastRow + lastCol) == 2)
-				if(steps[lastRow][lastCol] == steps[(lastRow + 1) % 3][(lastCol + 2) % 3] && steps[lastRow][lastCol] == steps[(lastRow + 2) % 3][(lastCol + 1) % 3])
+			else if((lastRow + lastCol) == 2) {
+				if(steps[lastRow][lastCol] == steps[(lastRow + 1) % 3][(lastCol + 2) % 3] && steps[lastRow][lastCol] == steps[(lastRow + 2) % 3][(lastCol + 1) % 3]) {
+					int minRow = Math.min(this.lastRow, Math.min((this.lastRow + 1) % 3, (this.lastRow + 2) % 3));
+					int minCol = Math.min(this.lastCol, Math.min((this.lastCol + 1) % 3, (this.lastCol + 2) % 3));
+					int maxRow = Math.max(this.lastRow, Math.max((this.lastRow + 1) % 3, (this.lastRow + 2) % 3));
+					int maxCol = Math.max(this.lastCol, Math.max((this.lastCol + 1) % 3, (this.lastCol + 2) % 3));
+					this.calcXY(minRow, maxRow, minCol, maxCol);
 					return true;
+				}
+			}
 			
 			return false;
 		}
@@ -92,6 +143,22 @@ public class Match {
 		this.setPlayer_1(player_1);
 		this.setPlayer_2(player_2);
 		this.setStatus(status);
+	}
+	
+	public double getStartX() {
+		return this.steps.getStartX();
+	}
+	
+	public double getStartY() {
+		return this.steps.getStartY();
+	}
+	
+	public double getEndX() {
+		return this.steps.getEndX();
+	}
+	
+	public double getEndY() {
+		return this.steps.getEndY();
 	}
 	
 	public void translate(String step) {
@@ -223,6 +290,4 @@ public class Match {
 	public void setMatch_id(int match_id) {
 		this.match_id = match_id;
 	}
-
-	
 }

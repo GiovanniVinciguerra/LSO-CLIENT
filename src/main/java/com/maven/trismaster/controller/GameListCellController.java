@@ -13,13 +13,13 @@ import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.layout.Pane;
+import javafx.scene.text.Text;
 
 public class GameListCellController extends ListCell<Match> implements Initializable {
 	@FXML Pane tag, notice;
-	@FXML Label player_1, player_2, status, seed, match_id;
+	@FXML Text player_1, player_2, status, seed, match_id;
 	@FXML Button refresh, play;
 	
 	private InvalidationListener statusPropertyListener = null;

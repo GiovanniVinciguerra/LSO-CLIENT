@@ -35,7 +35,6 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -46,6 +45,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.SVGPath?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
 <VBox maxHeight="100.0" minHeight="100.0" minWidth="500.0" prefHeight="100.0" prefWidth="500.0" style="-fx-background-radius: 8; -fx-border-radius: 8;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
   <children>
@@ -69,30 +69,30 @@
                                  <children>
                                     <HBox alignment="CENTER_LEFT" spacing="5.0" VBox.vgrow="NEVER">
                                        <children>
-                                          <Label text="%player_1">
+                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="%player_1">
                                              <font>
                                                 <Font name="Roboto" size="14.0" />
                                              </font>
-                                          </Label>
-                                          <Label fx:id="player_1" text="Player_1">
+                                          </Text>
+                                          <Text fx:id="player_1" strokeType="OUTSIDE" strokeWidth="0.0" text="Player_1">
                                              <font>
                                                 <Font name="Roboto" size="14.0" />
                                              </font>
-                                          </Label>
+                                          </Text>
                                        </children>
                                     </HBox>
                                     <HBox alignment="CENTER_LEFT" spacing="5.0" VBox.vgrow="NEVER">
                                        <children>
-                                          <Label text="%player_2">
+                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="%player_2">
                                              <font>
                                                 <Font name="Roboto" size="14.0" />
                                              </font>
-                                          </Label>
-                                          <Label fx:id="player_2" text="Player_2">
+                                          </Text>
+                                          <Text fx:id="player_2" strokeType="OUTSIDE" strokeWidth="0.0" text="Player_2">
                                              <font>
                                                 <Font name="Roboto" size="14.0" />
                                              </font>
-                                          </Label>
+                                          </Text>
                                        </children>
                                     </HBox>
                                  </children>
@@ -101,30 +101,30 @@
                                  <children>
                                     <HBox alignment="CENTER_LEFT" spacing="5.0" VBox.vgrow="NEVER">
                                        <children>
-                                          <Label text="%status">
+                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="%status">
                                              <font>
                                                 <Font name="Roboto" size="14.0" />
                                              </font>
-                                          </Label>
-                                          <Label fx:id="status" text="Status">
+                                          </Text>
+                                          <Text fx:id="status" strokeType="OUTSIDE" strokeWidth="0.0" text="Status">
                                              <font>
                                                 <Font name="Roboto" size="14.0" />
                                              </font>
-                                          </Label>
+                                          </Text>
                                        </children>
                                     </HBox>
                                     <HBox alignment="CENTER_LEFT" spacing="5.0" VBox.vgrow="NEVER">
                                        <children>
-                                          <Label text="%seed">
+                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="%seed">
                                              <font>
                                                 <Font name="Roboto" size="14.0" />
                                              </font>
-                                          </Label>
-                                          <Label fx:id="seed" text="Seed">
+                                          </Text>
+                                          <Text fx:id="seed" strokeType="OUTSIDE" strokeWidth="0.0" text="Seed">
                                              <font>
                                                 <Font name="Roboto" size="14.0" />
                                              </font>
-                                          </Label>
+                                          </Text>
                                        </children>
                                     </HBox>
                                  </children>
@@ -133,16 +133,16 @@
                                  <children>
                                     <HBox alignment="CENTER_LEFT" spacing="5.0">
                                        <children>
-                                          <Label text="%matchid">
+                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="%matchid">
                                              <font>
                                                 <Font name="Roboto" size="14.0" />
                                              </font>
-                                          </Label>
-                                          <Label fx:id="match_id" text="MatchID">
+                                          </Text>
+                                          <Text fx:id="match_id" strokeType="OUTSIDE" strokeWidth="0.0" text="MatchID">
                                              <font>
                                                 <Font name="Roboto" size="14.0" />
                                              </font>
-                                          </Label>
+                                          </Text>
                                        </children>
                                     </HBox>
                                  </children>

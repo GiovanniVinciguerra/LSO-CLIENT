@@ -33,7 +33,12 @@ public class GenericDialogController implements Initializable {
 		this.root.getButtonTypes().add(cls_btn);
 		
 		this.close = (Button) this.root.lookupButton(cls_btn);
-		this.close.setOnAction(_ -> App.close_dialog());
+		this.close.setOnAction(_ -> {
+			if(this instanceof GameDialogController)
+				App.close_game_dialog();
+			else
+				App.close_dialog();
+		});
 		
 		if(this.content != null)
 			this.cnt_txt.setText(this.content);

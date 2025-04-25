@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
+import com.maven.trismaster.controller.GameDialogController;
 import com.maven.trismaster.controller.GenericDialogController;
 import com.maven.trismaster.dao.UserDaoService;
 import javafx.application.Application;
@@ -22,7 +23,7 @@ public class App extends Application {
 	public static final double DEFAULT_MIN_WIDTH = 960.0, DEFAULT_MIN_HEIGHT = 540.0;
 	private final String DEFAULT_LOCALE_PATH = "com.maven.trismaster.locales.strings";
 	private static ResourceBundle resource = null;
-	private static Stage stage = null, dialog_stage = null;
+	private static Stage stage = null, dialog_stage = null, game_dialog = null;
 	
 	private UserDaoService user_dao = new UserDaoService();
 	
@@ -76,7 +77,6 @@ public class App extends Application {
 	
 	public static void crt_dlg(String dialog, GenericDialogController ctrl) {
 		try {
-			
 			GenericDialogController controller = ctrl;
 			load_dialog(dialog, controller);
 		} catch (IOException error) {
@@ -84,19 +84,30 @@ public class App extends Application {
 		}
 	}
 	
-	private static void load_dialog(String dialog, Object controller) throws IOException {
+	private static void load_dialog(String dialog, GenericDialogController controller) throws IOException {
 		FXMLLoader loader = new FXMLLoader(App.class.getResource("fxml/" + dialog + ".fxml"), resource);
 		loader.setController(controller);
 		
 		Parent parent = loader.load();
 		
-		dialog_stage = new Stage();
-		
-		dialog_stage.setScene(new Scene(parent, Color.TRANSPARENT));
-		dialog_stage.initModality(Modality.WINDOW_MODAL);
-		dialog_stage.initStyle(StageStyle.TRANSPARENT);
-		dialog_stage.initOwner(stage);
-		dialog_stage.showAndWait();
+		if(controller instanceof GameDialogController) {
+			game_dialog = new Stage();
+			
+			game_dialog.setScene(new Scene(parent, Color.TRANSPARENT));
+			game_dialog.initModality(Modality.WINDOW_MODAL);
+			game_dialog.initStyle(StageStyle.TRANSPARENT);
+			game_dialog.initOwner(stage);
+			game_dialog.showAndWait();
+		}
+		else {
+			dialog_stage = new Stage();
+			
+			dialog_stage.setScene(new Scene(parent, Color.TRANSPARENT));
+			dialog_stage.initModality(Modality.WINDOW_MODAL);
+			dialog_stage.initStyle(StageStyle.TRANSPARENT);
+			dialog_stage.initOwner(stage);
+			dialog_stage.showAndWait();
+		}
 	}
 	
 	public static void close_dialog() {
@@ -104,6 +115,13 @@ public class App extends Application {
 			dialog_stage.close();
 		
 		dialog_stage = null;
+	}
+	
+	public static void close_game_dialog() {
+		if(game_dialog != null)
+			game_dialog.close();
+		
+		game_dialog = null;
 	}
 	
 	public static Node load_cell(String cell, Object controller) throws IOException {
