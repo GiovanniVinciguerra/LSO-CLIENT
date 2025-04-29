@@ -8,6 +8,7 @@ import com.maven.trismaster.controller.GameDialogController;
 import com.maven.trismaster.controller.GenericDialogController;
 import com.maven.trismaster.dao.UserDaoService;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -97,16 +98,15 @@ public class App extends Application {
 			game_dialog.initModality(Modality.WINDOW_MODAL);
 			game_dialog.initStyle(StageStyle.TRANSPARENT);
 			game_dialog.initOwner(stage);
-			game_dialog.showAndWait();
-		}
-		else {
+			Platform.runLater(() -> game_dialog.showAndWait());
+		} else {
 			dialog_stage = new Stage();
 			
 			dialog_stage.setScene(new Scene(parent, Color.TRANSPARENT));
 			dialog_stage.initModality(Modality.WINDOW_MODAL);
 			dialog_stage.initStyle(StageStyle.TRANSPARENT);
 			dialog_stage.initOwner(stage);
-			dialog_stage.showAndWait();
+			Platform.runLater(() -> dialog_stage.showAndWait());
 		}
 	}
 	
