@@ -2,11 +2,9 @@ package com.maven.trismaster.controller;
 
 import java.net.URL;
 import java.util.ResourceBundle;
-
 import com.maven.trismaster.App;
 import com.maven.trismaster.connection.HttpConnection;
 import com.maven.trismaster.entity.User;
-
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;

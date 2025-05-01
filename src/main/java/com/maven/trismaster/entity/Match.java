@@ -1,7 +1,6 @@
 package com.maven.trismaster.entity;
 
 import java.util.Objects;
-
 import com.maven.trismaster.App;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;

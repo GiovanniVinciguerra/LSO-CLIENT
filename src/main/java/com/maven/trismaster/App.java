@@ -3,7 +3,6 @@ package com.maven.trismaster;
 import java.io.IOException;
 import java.util.Locale;
 import java.util.ResourceBundle;
-
 import com.maven.trismaster.controller.GameDialogController;
 import com.maven.trismaster.controller.GenericDialogController;
 import com.maven.trismaster.dao.SettingsDaoService;

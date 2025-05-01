@@ -8,7 +8,6 @@ import com.maven.trismaster.connection.HttpConnection;
 import com.maven.trismaster.entity.Match;
 import com.maven.trismaster.entity.Stat;
 import com.maven.trismaster.entity.User;
-
 import javafx.application.Platform;
 import javafx.beans.InvalidationListener;
 import javafx.beans.value.ChangeListener;
