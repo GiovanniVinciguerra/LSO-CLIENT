@@ -54,7 +54,7 @@
                <header>
                   <VBox spacing="5.0">
                      <children>
-                        <Label text="%dialog.info.title">
+                        <Label text="%dialog.connection.title">
                            <font>
                               <Font name="Roboto" size="24.0" />
                            </font>
