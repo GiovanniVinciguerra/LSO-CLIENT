@@ -6,6 +6,7 @@ import java.util.ResourceBundle;
 
 import com.maven.trismaster.controller.GameDialogController;
 import com.maven.trismaster.controller.GenericDialogController;
+import com.maven.trismaster.dao.SettingsDaoService;
 import com.maven.trismaster.dao.UserDaoService;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -19,21 +20,25 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
-public class App extends Application {
+public class App extends Application {	
 	public static final double DEFAULT_WIDTH = 1366.0, DEFAULT_HEIGTH = 768.0;
 	public static final double DEFAULT_MIN_WIDTH = 960.0, DEFAULT_MIN_HEIGHT = 540.0;
 	private final String DEFAULT_LOCALE_PATH = "com.maven.trismaster.locales.strings";
 	private static ResourceBundle resource = null;
 	private static Stage stage = null, dialog_stage = null, game_dialog = null;
+	private static String connectionType = new String("Remote");
 	
+	private SettingsDaoService settings_dao = new SettingsDaoService();
 	private UserDaoService user_dao = new UserDaoService();
 	
-	public static void main( String[] args ) {
+	public static void main(String[] args) {
 		launch(args);
 	}
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
+		settings_dao.retrieve(); /* Ottiene le impostazioni dell'applicazione */
+		
 		@SuppressWarnings("deprecation")
 		Locale locale = new Locale("en", "UK"); // English United Kingdom
 		resource = ResourceBundle.getBundle(DEFAULT_LOCALE_PATH, locale);
@@ -136,5 +141,17 @@ public class App extends Application {
 	
 	public static Scene get_stage_scene() {
 		return stage.getScene();
+	}
+	
+	public static boolean isRemote() {
+		return connectionType.compareTo("Remote") == 0;
+	}
+	
+	public static String getConnectionType() {
+		return connectionType;
+	}
+	
+	public static void setConnectionType(String type) {
+		connectionType = type;
 	}
 }

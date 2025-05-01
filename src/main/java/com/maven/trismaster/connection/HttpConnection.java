@@ -11,6 +11,7 @@ import org.apache.hc.core5.http.io.entity.EntityUtils;
 import org.apache.hc.core5.http.io.entity.StringEntity;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.maven.trismaster.App;
 import com.maven.trismaster.controller.ObjectAccessController;
 import com.maven.trismaster.entity.Match;
 import com.maven.trismaster.entity.Message;
@@ -20,7 +21,15 @@ import com.maven.trismaster.entity.User;
 import javafx.application.Platform;
 
 public class HttpConnection {
-	private static final String URL = "http://trismaster.ddns.net:8080/";
+	private static String URL = "http://trismaster.ddns.net:8080/";
+	
+	public HttpConnection() {
+		/* Permette il funzionamento dell'applicazione in locale o in remoto */
+		if(App.isRemote())
+			URL = "http://trismaster.ddns.net:8080/";
+		else
+			URL = "http://localhost:8080/";
+	}
 	
 	public static int login_request() throws Exception {		
 		/* Creazione del corpo della richiesta */

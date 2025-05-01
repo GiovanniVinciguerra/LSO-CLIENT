@@ -50,6 +50,7 @@ public class ValidationDialogController extends GenericDialogController implemen
 				}
 			}
 		});
+		
 		this.no.setOnAction(_ -> {
 			Match match = ObjectAccessController.getValidationMatch();
 			if(match != null) {

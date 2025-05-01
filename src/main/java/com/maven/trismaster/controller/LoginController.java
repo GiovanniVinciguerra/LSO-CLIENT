@@ -22,7 +22,9 @@ public class LoginController implements Initializable {
 	@FXML private Label signup;
 	@FXML private ImageView welcome;
 	
-	private final String LOGIN_ERROR = "login.error.aut";
+	/* Permette di non mostrare più il dialog di richiesta tipologia connessione (Remote o Local) fino al prossimo riavvio dell'applicazione */
+	private static boolean isShowedConnection = false;
+	private final String LOGIN_ERROR = "login.error.aut", CONNECTION_CHOICE_MESSAGE = "connection.choice.message";
 	private UserDaoService user_dao = new UserDaoService();
 
 	@Override
@@ -49,6 +51,10 @@ public class LoginController implements Initializable {
 			this.welcome.fitWidthProperty().bind(App.get_stage_scene().widthProperty().multiply(0.65));
 			this.welcome.fitHeightProperty().bind(App.get_stage_scene().heightProperty().multiply(1.0));
 			this.login.requestFocus();
+			if(!isShowedConnection) {
+				App.crt_dlg("connection_dialog", new ConnectionDialogController(resources.getString(CONNECTION_CHOICE_MESSAGE)));
+				isShowedConnection = true;
+			}
 		});
 	}
 }
