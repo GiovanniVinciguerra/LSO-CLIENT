@@ -5,8 +5,8 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>com.maven</groupId>
-  <artifactId>trismaster</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <artifactId>trismaster-client</artifactId>
+  <version>1.0</version>
 
   <name>trismaster</name>
   <description>A simple trismaster.</description>

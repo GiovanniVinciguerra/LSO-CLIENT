@@ -23,7 +23,7 @@ import javafx.application.Platform;
 public class HttpConnection {
 	private static String URL = "http://trismaster.ddns.net:8080/";
 	
-	public HttpConnection() {
+	public static void set_url() {
 		/* Permette il funzionamento dell'applicazione in locale o in remoto */
 		if(App.isRemote())
 			URL = "http://trismaster.ddns.net:8080/";
