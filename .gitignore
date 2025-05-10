@@ -1,0 +1,8 @@
+/target/generated-source
+/target/javafx-sdk-linux-24.0.1
+/target/javafx-sdk-osx-24.0.1
+/target/javafx-sdk-win-24.0.1
+/target/maven-archiver
+/target/maven-status
+/target/trismasterfx-1.0-SNAPSHOT.jar
+/target/trismasterfx-1.0-SNAPSHOT-shaded.jar
